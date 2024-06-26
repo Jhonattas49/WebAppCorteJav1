@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 //start em app
 // Exemplo de rota
 app.get('/', (req, res) => {
-  res.send('Hello, World!');
+  res.send('Sobre tudo o que se deve guardar, guarda o seu coração...');
 });
 
 module.exports = app;
