@@ -1,9 +1,11 @@
 'use strict';
 const repository = require('../domain/repositories/CustomerRepository');
-const { validationResult } = require('express-validator');
+const { validationResult, body } = require('express-validator');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const SALT_KEY = process.env.SALT_KEY;
+const roles = require('../shared/enums/Roles');
+
 
 exports.get = async (req, res, next) => {
     try {
@@ -26,14 +28,16 @@ exports.post = async (req, res, next) => {
     
     // Encripta a senha antes de salvar, adicionando o SALT_KEY
     const hashedPassword = await bcrypt.hash(req.body.password + SALT_KEY , 10);
-
+    const findKeyBy = require('../shared/utils/FindKeyByValue').getKey(roles.customer);
     try {
-        // await repository.create({
-        //     Name: req.body.name,
-        //     Elementmail: req.body.email,
-        //     Password: md5(req.body.password + global.SALT_KEY)
-        //   });
-        res.status(201).send({ message: hashedPassword });
+        await repository.create({
+            name: req.body.name,
+            email: req.body.email,
+            mobilePhone: req.body.mobilePhone,
+            roles: findKeyBy,
+            password: hashedPassword
+          });
+        res.status(201).send({ message: 'Cliente cadastrado com sucesso!' });
     } catch (e) {
         res.status(500).send({
             result: e,

@@ -6,9 +6,10 @@ const roles = require('../enums/Roles');
 
 const customerValidationRules = () => {
     return [
-        body('Name').notEmpty().withMessage('Nome é obrigatório').trim().escape(),
-        body('Email').isEmail().withMessage('Email inválido').normalizeEmail(),
-        body('Password').isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),       
+        body('name').notEmpty().withMessage('Nome é obrigatório').trim().escape(),
+        body('email').isEmail().withMessage('Email inválido').normalizeEmail(),
+        body('mobilePhone').isMobilePhone('pt-BR').withMessage('Número de telefone inválido'), // Certifique-se que o locale esteja correto e suportado
+        body('password').isLength({ min: 6 }).withMessage('A senha deve ter pelo menos 6 caracteres'),       
     ];
 };
 
