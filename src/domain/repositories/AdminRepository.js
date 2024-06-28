@@ -4,7 +4,8 @@
  * @namespace 'src/domain/repositories'
  * @description Esta classe é responsável por gerenciar operações relacionadas 
  * ao modelo Customer no banco de dados MongoDB, utilizando o Mongoose. 
- * Oferece métodos para criar novos registros e recuperar dos cliente.
+ * Oferece métodos para criar novos registros e recuperar dos admin.
+ * 
  * @author [GERSON ALVES DA SILVA]
  * @since [27/06/2024]
  */
@@ -12,7 +13,6 @@
 
 const mongoose = require('mongoose');
 const Customer = mongoose.model('Customer'); 
-const comparePassword= require('../services/AuthServices');
 
 exports.get = async () =>{
     const result= await Customer.find({});
@@ -24,8 +24,3 @@ exports.create = (data) =>{
     return customer.save();
 };
 
-exports.authenticate = async (data) => {
-    const customer = await Customer.findOne({email : data.email});
-    const result = comparePassword.comparePassword(data.password,customer.password)?customer:false;
-    return result;
-};
