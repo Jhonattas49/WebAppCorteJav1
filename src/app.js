@@ -4,11 +4,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose =  require('mongoose');
 
-
 const app = express();
 const router = express.Router();
 
-
+//Carrega os arquivos sensíveis
 require('dotenv').config();
 
 const connectionString = process.env.MONGODB_URI;
@@ -17,22 +16,22 @@ const connectionString = process.env.MONGODB_URI;
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(connectionString);
-    console.log('MongoDB connected');
+    //console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
     process.exit(1); // Encerra o aplicativo em caso de erro crítico
   }
 };
 
-// Conectar ao MongoDB
+// Validar a conexão com o banco
 connectToDatabase();
 
 //Carregando os modelss
-
-
+require('./domain/models/loadModels');
 //Carregar as rotas
+const routes= require('./domain/routes/index');
 
-
+//Carrega e define o tamanho do json
 app.use(bodyParser.json({
     limit: '5mb'
 }));
@@ -47,10 +46,8 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.urlencoded({extended:false}));
 
-//start em app
-// Exemplo de rota
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+//Inject route no app
+app.use('/customers', routes.CustomerRoute);
 
+//start em app
 module.exports = app;

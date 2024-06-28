@@ -1,3 +1,6 @@
 
 #retirando repositório
 node_modules/
+
+# Ignorar arquivo .env
+.env
