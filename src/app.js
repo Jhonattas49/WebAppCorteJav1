@@ -48,6 +48,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 //Inject route no app
 app.use('/customers', routes.CustomerRoute);
+app.use('/admin', routes.AdminRoute);
 
 //start em app
 module.exports = app;

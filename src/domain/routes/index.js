@@ -1,6 +1,8 @@
 //Carrega as rotas
-
+//console.log('Index sem error********');
 
 module.exports = {
-    CustomerRoute: require('./CustumerRoute')
+    CustomerRoute: require('./CustumerRoute'),
+    AdminRoute: require('./AdminRoute')
+
 }

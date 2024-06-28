@@ -1,6 +1,6 @@
 'use strict';
 const repository = require('../domain/repositories/CustomerRepository');
-const { validationResult, body } = require('express-validator');
+const { validationResult} = require('express-validator');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const SALT_KEY = process.env.SALT_KEY;
