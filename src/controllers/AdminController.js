@@ -1,45 +1,29 @@
+/**
+ * @filename AdminController.js
+ * @class AdminController
+ * @namespace 'src/controllers'
+ * @description **Controlador para gerenciamento de administradores.**
+ * Esta classe define rotas para gerenciar administradores na aplicação. 
+ * Ela utiliza o repositório `AdminRepository` para acessar dados de administradores 
+ * e valida entradas de usuário com o `express-validator`.
+ * 
+ * @author [GERSON ALVES DA SILVA]
+ * @since [28/06/2024]
+ */
 'use strict';
+
 const repository = require('../domain/repositories/AdminRepository');
 const { validationResult } = require('express-validator');
-const roles = require('../shared/enums/Roles');
-const autheService = require('../domain/services/AuthServices');
-const venomBotController = require('./VenomBotController');
 
-exports.login = async (req, res, next) => {
+exports.get = async (req, res, next) => {
     try {
-        const customer = await repository.authenticate({
-            email: req.body.email,
-            password: req.body.password
-        });
-
-        if (!customer) {
-            res.status(404).send({
-                message: "Usuário ou senha inválido!"
-            });
-            return;
-        }
-        const token = await autheService.generateToken({
-            id: customer._id,
-            email: customer.email,
-            name: customer.name,
-            roles: customer.roles,
-            mobilePhone: customer.mobilePhone
-        });
-
-        // Chamar o método StartBot do BotController
-
-        if(!customer.roles.includes(roles.customer))
-        {
-            await venomBotController.StartBot(token, res, next);
-            return;
-        }
-
-
-        res.status(200).send(token);
+        //var data = await repository.get();
+        res.status(200).send(res);
     } catch (e) {
         res.status(500).send({
             result: e,
             message: 'Falha ao processar sua requisição!'
         });
     }
-};
+}
+

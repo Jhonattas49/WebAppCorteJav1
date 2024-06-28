@@ -1,3 +1,17 @@
+/**
+ * @file server.js
+ * @class server
+ * @namespace 'bin/'
+ * @description **Ponto de entrada principal da aplicação web.**
+ * Este arquivo inicia o servidor Node.js e configura o aplicativo Express.
+ * Ele escuta conexões recebidas na porta especificada e lida com erros de forma 
+ * elegante.
+ * 
+ * @author [GERSON ALVES DA SILVA]
+ * @since [26/06/2024]
+ */
+'use strict';
+
 const app = require('../src/app');
 const debug = require('debug')('webappcortejav1:server');
 const http = require('http');
@@ -10,7 +24,6 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-//console.log('API rodando na porta2 ' + port);
 
 function normalizePort(val) {
   const port = parseInt(val, 10);

@@ -1,3 +1,17 @@
+/**
+ * @filename TokenManager.js
+ * @class TokenManager
+ * @namespace 'src/domain/services' 
+ * @description **Gerenciamento de tokens de acesso.**
+ * Este arquivo define um gerenciador de tokens de acesso para aplicações web. 
+ * Ele provê funções para:
+ *  * Salvar tokens de acesso no LocalStorage e em um cookie HttpOnly seguro.
+ *  * Recuperar tokens de acesso do LocalStorage.
+ *  * Limpar tokens de acesso do LocalStorage e do cookie.
+ * 
+ * @author [GERSON ALVES DA SILVA]
+ * @since [27/06/2024]
+ */
 'use strict';
 
 exports.salvarToken = (token)=> {

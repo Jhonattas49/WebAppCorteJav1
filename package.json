@@ -26,6 +26,7 @@
     "pug": "^3.0.3",
     "serve-favicon": "^2.3.0",
     "uninstall": "^0.0.0",
+    "uuid": "^10.0.0",
     "venom-bot": "github:orkestral/venom"
   },
   "devDependencies": {

@@ -1,19 +1,49 @@
 /**
- * File: VenomBotController.js
- * Dir: src/Controllers
+ * @filename VenomBotController.js
+ * @class VenomBotController
+ * @namespace 'src/controllers'
+ * @description **Controlador para gerenciamento do bot Venom.**
+ * Este controlador fornece endpoints para interagir com o bot Venom, 
+ * uma biblioteca JavaScript para criar bots no WhatsApp. 
+ * 
+ * @author [GERSON ALVES DA SILVA]
+ * @since [27/06/2024]
  */
 'use strict';
+
 const venom = require('venom-bot');
-let sessionName;
+require('../shared/public/Global');
+const autheService = require('../domain/services/AuthServices');
+
+exports.get = async (req, res, next) => {
+  try {      
+      res.status(200).send({
+        message: 'Venom é um sistema de alto desempenho desenvolvido em JavaScript para criação de bot para WhatsApp, ' +
+        'suporte para criação de qualquer interação, como atendimento ao cliente, envio de mídia, reconhecimento de frases baseado em inteligência artificial e todo tipo de arquitetura de design para WhatsApp.'
+      });
+  } catch (e) {
+      res.status(500).send({
+          result: e,
+          message: 'Falha ao processar sua requisição!'
+      });
+  }
+}
 
 exports.StartBot = async (req, res, next) => {
   try {
-    sessionName = process.env.VENOM_SESSION_NAME || req;
+    // Recupera o token
+    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    // Decodifica o token
+    const data = await autheService.decodeToken(token);
 
-    console.log(sessionName);
-    return;
+    // Verifica se a sessão já existe no global.VENOM_CLIENT
+    if (global.VENOM_CLIENT.has(data.id)) {
+      res.redirect('/admin'); // Redireciona para a página do administrador
+      return;
+    }
+
     venom.create(
-      sessionName,
+      data.id,
       (base64Qr, asciiQR, attempts, urlCode) => {
         console.log('Número de tentativas para ler o QR code:', attempts);
         console.log('QR code no terminal:', asciiQR);
@@ -22,7 +52,7 @@ exports.StartBot = async (req, res, next) => {
 
         // Remover o prefixo 'data:image/png;base64,' do base64Qr
         const qrCodeBase64 = base64Qr.replace(/^data:image\/\w+;base64,/, '');
-
+        
         // Envie o QR code como parte da resposta HTTP
         res.status(200).send(qrCodeBase64);
       },
@@ -30,56 +60,53 @@ exports.StartBot = async (req, res, next) => {
         console.log('Status da Sessão:', statusSession);
         console.log('Nome da Sessão:', session);
         if (statusSession === 'isLogged' || statusSession === 'qrReadSuccess') {
-          // Lógica adicional após o login bem-sucedido, se necessário
+          console.log(`Sessão ${session} logada com sucesso`);
         } else if (statusSession === 'qrReadFail' || statusSession === 'erroPageWhatsapp') {
           // Lidar com falha ao ler o QR code ou erro na página do WhatsApp
-          res.status(500).send({
-            message: 'Failed to read QR code or WhatsApp page error',
-            error: new Error('Falha ao ler o QR code ou erro na página do WhatsApp')
-          });
+          const error = new Error('Falha ao ler o QR code ou erro na página do WhatsApp');
+          next(error); // Chama o middleware de erro
         }
       },
-      {
-        logQR: false,
-        autoClose: 60000, // Fecha automaticamente após 60 segundos se o QR code não for escaneado
-      }
-    );
-
-    console.log('Bot iniciado');
-
-  } catch (e) {
-    res.status(500).send({
-      message: 'Failed to start bot',
-      error: e.message
+      { logQR: false, autoClose: 60000 }
+    ).then(client => {
+      global.VENOM_CLIENT.set(data.id, client);
+      res.redirect('/admin'); // Redireciona para a página do administrador
+    }).catch(error => {
+      next(error); // Chama o middleware de erro
     });
+
+  } catch (error) {
+    next(error); // Chama o middleware de erro
   }
 };
 
-
-
 // exports.StartBot = async (req, res, next) => {
 //   try {
-//     const sessionName = process.env.VENOM_SESSION_NAME || 'default-session';
-
-//     console.log('Iniciando Venom');
-//     await venom.create(
+//     venom.create(
 //       sessionName,
 //       (base64Qr, asciiQR, attempts, urlCode) => {
-//         // Armazena o QR code em uma variável global se necessário
-//         global.VENOM_QRCOD = base64Qr;
 //         console.log('Número de tentativas para ler o QR code:', attempts);
 //         console.log('QR code no terminal:', asciiQR);
 //         console.log('QR code base64:', base64Qr);
 //         console.log('URL code:', urlCode);
 
+//         // Remover o prefixo 'data:image/png;base64,' do base64Qr
+//         const qrCodeBase64 = base64Qr.replace(/^data:image\/\w+;base64,/, '');
 //         // Envie o QR code como parte da resposta HTTP
-//         res.status(200).send({ qrCode: base64Qr });
+//         res.status(200).send(qrCodeBase64);
 //       },
-//       (statusSession, session) => {
-//         console.log('Status da Sessão:', statusSession);
-//         console.log('Nome da Sessão:', session);
+//       (statusSession, session) => {        
 //         if (statusSession === 'isLogged' || statusSession === 'qrReadSuccess') {
-//           // Lógica adicional após o login bem-sucedido, se necessário
+          
+//         // Iniciar cliente do Venom para a sessão atual
+//         const client = await venom.getSession(sessionName);
+
+//         // Armazenar cliente do Venom na estrutura de dados por sessão
+//         global.VENOM_CLIENT.set(sessionName, client);
+
+//         // Iniciar a lógica para lidar com mensagens recebidas pelo cliente do Venom
+        
+          
 //         } else if (statusSession === 'qrReadFail' || statusSession === 'erroPageWhatsapp') {
 //           // Lidar com falha ao ler o QR code ou erro na página do WhatsApp
 //           res.status(500).send({
@@ -88,14 +115,7 @@ exports.StartBot = async (req, res, next) => {
 //           });
 //         }
 //       },
-//       {
-//         logQR: false,
-//         autoClose: 60000, // Fecha automaticamente após 60 segundos se o QR code não for escaneado
-//       }
-//     );
-
-//     console.log('Bot iniciado');
-
+//       {logQR: false,autoClose: 60000});
 //   } catch (e) {
 //     res.status(500).send({
 //       message: 'Failed to start bot',
