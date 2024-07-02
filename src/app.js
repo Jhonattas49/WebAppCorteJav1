@@ -1,16 +1,3 @@
-/**
- * @filename app.js 
- * @class app
- * @namespace 'src/' 
- * @description **Ponto de entrada principal**
- * O arquivo app.js é o ponto de entrada principal da sua aplicação Express. 
- * Ele configura o servidor, estabelece a conexão com o banco de dados MongoDB, 
- * carrega os models e rotas da aplicação, e define middlewares para tratar requisições, 
- * respostas e erros.
- * 
- * @author [GERSON ALVES DA SILVA]
- * @since [25/06/2024]
- */
 'use strict';
 
 const express = require('express');
@@ -40,7 +27,7 @@ const connectToDatabase = async () => {
 connectToDatabase();
 
 //Carregando os modelss
-require('./domain/models/loadModels');
+require('./shared/models/_index');
 //Carregar as rotas
 const routes= require('./domain/routes/_index');
 
@@ -59,17 +46,22 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.urlencoded({extended:false}));
 
-//Inject route no app
-app.use('/customers', routes.CustomerRoute);
-app.use('/bot', routes.VenomBotRoute);
+//Criando super usuário
+//const createSupUser  = require('./domain/repositories/UsersRepository');
 
-// Middleware de erro
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send({
-    message: err.message,
-    error: err
-  });
-});
+// IIFE (Immediately Invoked Function Expression) para criar o super usuário ao iniciar a aplicação
+// (async () => {
+//   try {
+//     await createSupUser.createSupUser();
+//     console.log('Inicialização concluída com sucesso!');
+//   } catch (error) {
+//     console.error('Erro durante a inicialização:', error);
+//     process.exit(1); // Encerra a aplicação em caso de erro crítico
+//   }
+// })();
+//Inject route no app
+app.use('/', routes.indexRoute);
+//app.use('/customers', routes.CustomerRoute);
+
 //start em app
 module.exports = app;

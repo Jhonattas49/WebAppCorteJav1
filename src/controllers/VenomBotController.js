@@ -29,19 +29,13 @@ exports.get = async (req, res, next) => {
   }
 }
 
-exports.StartBot = async (req, res, next) => {
+exports.post = async (req, res, next) => {
   try {
     // Recupera o token
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
     // Decodifica o token
     const data = await autheService.decodeToken(token);
-
-    // Verifica se a sessão já existe no global.VENOM_CLIENT
-    if (global.VENOM_CLIENT.has(data.id)) {
-      res.redirect('/admin'); // Redireciona para a página do administrador
-      return;
-    }
-
+    
     venom.create(
       data.id,
       (base64Qr, asciiQR, attempts, urlCode) => {
@@ -75,7 +69,7 @@ exports.StartBot = async (req, res, next) => {
       next(error); // Chama o middleware de erro
     });
 
-  } catch (error) {
+  } catch (error) {    
     next(error); // Chama o middleware de erro
   }
 };

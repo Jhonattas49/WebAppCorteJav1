@@ -17,8 +17,7 @@ const { validationResult } = require('express-validator');
 
 exports.get = async (req, res, next) => {
     try {
-        console.log('Pagina index carregada.')
-        res.status(200).send(res);
+        res.status(200).send('Seja benvindo');
     } catch (e) {
         res.status(500).send({
             result: e,

@@ -14,13 +14,10 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/AdminController');
-const validator = require('../../shared/validators/CustomerValidator');
-const autheService = require('../services/AuthServices');
+const controller = require('../../controllers/IndexController');
+const middlewaresIndex  = require('../../application/middlewares/index');
 
-
-
-router.get('/', autheService.authorize, controller.get);
+router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
 
 
 module.exports = router;

@@ -11,21 +11,20 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Customer = mongoose.model('Customer'); 
-const comparePassword= require('../services/AuthServices');
+const Role = mongoose.model('Role'); 
 
 exports.get = async () =>{
-    const result= await Customer.find({});
+    const result= await Role.find({});
     return result;
 };
 
 exports.create = async (data) =>{
-    var customer = new Customer(data);    
-    return await customer.save();
+    var role = new Role(data);    
+    return await role.save();
 };
 
 exports.update = (id, data) =>{
-    return Customer
+    return Role
         .findByIdAndUpdate(id,{
         $set: {
                 name: data.name,
@@ -34,10 +33,4 @@ exports.update = (id, data) =>{
                 roles: data.roles,
         } 
         },{new: true});
-};
-
-exports.authenticate = async (data) => {
-    const customer = await Customer.findOne({email : data.email});
-    const result = comparePassword.comparePassword(data.password,customer.password)?customer:false;
-    return result;
 };

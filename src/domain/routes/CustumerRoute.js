@@ -16,13 +16,24 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/CustomerController');
 const validator = require('../../shared/validators/CustomerValidator');
+const autheService = require('../services/AuthServices');
 
-router.get('/',controller.get);
+router.get('/see',controller.get);
 
-router.post('/', validator.customerValidationRules(), controller.post);
-router.post('/login', validator.customerValidationRules(), controller.login);
+router.post('/', 
+    validator.customerValidationRules(), 
+    controller.post);
 
-router.put('/');
+router.post('/login', 
+    validator.customerValidationRules(), 
+    controller.login);
+
+router.put('/:id',
+    autheService.authorize,
+    validator.customerValidationRules(),
+    controller.put);
+
+
 router.delete('/');
 
 module.exports = router;

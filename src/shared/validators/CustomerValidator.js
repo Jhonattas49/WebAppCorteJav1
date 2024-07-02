@@ -15,8 +15,6 @@
 const { body } = require('express-validator');
 const path = require('path');
 
-const roles = require('../enums/Roles');
-
 const customerValidationRules = () => {
     return [
         body('name').notEmpty().withMessage('Nome é obrigatório').trim().escape(),

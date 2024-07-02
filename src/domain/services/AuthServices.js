@@ -17,16 +17,41 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const SALT_KEY = process.env.SALT_KEY;
+const stringComparison = require('../../shared/utils/StringComparison');
 
-//Função para gerar o token
+// Função para gerar o token
 exports.generateToken = async (data) => {
     return jwt.sign(data, SALT_KEY, { expiresIn: '1d' });
 }
 
+// Função para decodificar o token
 exports.decodeToken = async (token) => {
-    var data= await jwt.verify(token, SALT_KEY);
-    return data;
+    try {
+        return jwt.verify(token, SALT_KEY);
+    } catch (error) {
+        throw new Error('Token Inválido');
+    }
 }
+
+exports.authorize = function (req, res, next) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    if (!token) {
+        res.status(401).json({
+            message: 'Acesso Restrito'
+        });
+    } else {
+        jwt.verify(token, SALT_KEY, function (error, decoded) {
+            if (error) {
+                res.status(401).json({
+                    message: 'Token Inválido'
+                });
+            } else {
+                next();
+            }
+        });
+    }
+};
 
 // Função para comparar uma senha encriptada com uma senha fornecida
 exports.comparePassword = (password, hash) => {

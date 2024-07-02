@@ -9,6 +9,7 @@
 'use strict';
 
 module.exports = {
+    indexRoute: require('./indexRoute'),
     CustomerRoute: require('./CustumerRoute'),
     VenomBotRoute: require('./VenomBotRoute'),
     AdminRoute: require('./AdminRoute')
