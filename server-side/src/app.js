@@ -1,10 +1,10 @@
 'use strict';
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
-const app = express();
+const morgan = require('morgan');  // Adicione o morgan aqui
+const cors= require('cors');
 const router = express.Router();
 
 //Carrega os arquivos sensíveis
@@ -25,11 +25,16 @@ const connectToDatabase = async () => {
 
 // Validar a conexão com o banco
 connectToDatabase();
+const app = express();
+app.use(cors());
 
-//Carregando os modelss
+//Carregando os models
 require('./shared/models/_index');
 //Carregar as rotas
-const routes= require('./domain/routes/_index');
+const routes = require('./domain/routes/_index');
+
+// Adicione o morgan como middleware
+app.use(morgan('dev'));  // Usando o formato 'dev' para desenvolvimento
 
 //Carrega e define o tamanho do json
 app.use(bodyParser.json({
@@ -44,22 +49,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended: false}));
 
-//Criando super usuário
-//const createSupUser  = require('./domain/repositories/UsersRepository');
-
-// IIFE (Immediately Invoked Function Expression) para criar o super usuário ao iniciar a aplicação
-// (async () => {
-//   try {
-//     await createSupUser.createSupUser();
-//     console.log('Inicialização concluída com sucesso!');
-//   } catch (error) {
-//     console.error('Erro durante a inicialização:', error);
-//     process.exit(1); // Encerra a aplicação em caso de erro crítico
-//   }
-// })();
-//Inject route no app
 app.use('/', routes.indexRoute);
 //app.use('/customers', routes.CustomerRoute);
 
