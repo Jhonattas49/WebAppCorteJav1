@@ -1,6 +1,3 @@
 
-#retirando repositório
+#Retirando o pacote de dependencia
 node_modules/
-
-# Ignorar arquivo .env
-.env

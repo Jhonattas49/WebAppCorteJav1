@@ -1,46 +1,17 @@
 {
   "name": "webappcortejav1",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./bin/server.js",
-    "dev": "nodemon ./bin/server.js"
+    "server": "nodemon server-side/bin/server.js",
+    "client": "npm start --prefix client-side",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "description": "webappcortejav1",
-  "author": {
-    "name": "Gerson"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.15.0",
-    "cookie-parser": "^1.4.0",
-    "debug": "^2.2.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.14.0",
-    "express-validator": "^7.1.0",
-    "mongoose": "^8.4.4",
-    "morgan": "^1.7.0",
-    "pug": "^3.0.3",
-    "serve-favicon": "^2.3.0",
-    "uninstall": "^0.0.0"
-  },
+  "keywords": [],
+  "author": "Gerson",
+  "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@babel/eslint-parser": "^7.14.5",
-    "eslint": "^8.21.0",
-    "nodemon": "^3.0.1"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "parser": "@babel/eslint-parser",
-    "parserOptions": {
-      "ecmaVersion": 2018,
-      "sourceType": "module",
-      "requireConfigFile": false
-    }
+    "concurrently": "^6.0.0"
   }
 }
