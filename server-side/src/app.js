@@ -2,29 +2,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
-const morgan = require('morgan');  // Adicione o morgan aqui
+const morgan = require('morgan'); 
 const cors= require('cors');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 
-//Carrega os arquivos sensíveis
-require('dotenv').config();
+// Verificar se o arquivo .env no server-side existe
+const serverSideEnvPath = path.resolve(__dirname, '../.env');
 
-const connectionString = process.env.MONGODB_URI;
+if (fs.existsSync(serverSideEnvPath)) {
+  require('dotenv').config({ path: serverSideEnvPath });
+} else {
+  require('dotenv').config();
+}
+
+const dbUri = process.env.MONGODB_URI;
+//const connectionString = process.env.MONGODB_URI;
+
+if (!dbUri) {
+  console.error("MongoDB URI is not defined in environment variables");
+  process.exit(1);
+}
 
 // Função assíncrona para conectar-se ao MongoDB usando Mongoose
 const connectToDatabase = async () => {
   try {
-    await mongoose.connect(connectionString);
+    await mongoose.connect(dbUri);
     //console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
     process.exit(1); // Encerra o aplicativo em caso de erro crítico
   }
 };
-
 // Validar a conexão com o banco
 connectToDatabase();
+
 const app = express();
 app.use(cors());
 

@@ -1,0 +1,17 @@
+{
+  "name": "webappcortejav1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server-side/bin/server.js",
+    "client": "npm start --prefix client-side",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "Gerson",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^6.0.0"
+  }
+}

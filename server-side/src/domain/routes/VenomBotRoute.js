@@ -17,7 +17,7 @@ const controller = require('../../controllers/VenomBotController');
 const validator = require('../../shared/validators/CustomerValidator');
 const autheService = require('../services/AuthServices');
 
-router.get('/', autheService.authorize, controller.get);
+router.get('/', controller.get);
 router.post('/', autheService.authorize, controller.post);
 
 module.exports = router;
