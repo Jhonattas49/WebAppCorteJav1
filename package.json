@@ -1,11 +1,13 @@
+
 {
   "name": "webappcortejav1",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "server": "nodemon server-side/bin/server.js",
-    "client": "npm start --prefix client-side",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "client": "dotnet run --project client-side/ClientViewsMudBlazor/ClientViewsMudBlazor/ClientViewsMudBlazor.csproj",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "listfile": "node listFiles.js"
   },
   "keywords": [],
   "author": "Gerson",
