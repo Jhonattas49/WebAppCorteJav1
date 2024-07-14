@@ -65,8 +65,9 @@ app.use(function (req, res, next) {
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', routes.indexRoute);
+app.use('/', routes.indexRoute);
 app.use('/bot', routes.VenomBotRoute);
-//app.use('/customers', routes.CustomerRoute);
+app.use('/customers', routes.CustomerRoute);
 
 //start em app
 module.exports = app;

@@ -16,8 +16,14 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/IndexController');
 const middlewaresIndex  = require('../../application/middlewares/index');
+const autheService = require('../services/AuthServices').authorize;
 
 router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
+router.get('/getdatauser', controller.getDataUser);
+router.post('/login',controller.login);
+
+
+
 
 
 module.exports = router;

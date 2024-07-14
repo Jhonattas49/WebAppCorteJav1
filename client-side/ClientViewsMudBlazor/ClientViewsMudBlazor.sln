@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientViewsMudBlazor", "ClientViewsMudBlazor\ClientViewsMudBlazor.csproj", "{628C71D5-2C5B-49A6-9590-619DA4098ADF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCorteja.Shared", "WebAppCorteja.Shared\WebAppCorteja.Shared.csproj", "{1100A3C5-FC25-444F-8171-DFB3A5B6FD2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{628C71D5-2C5B-49A6-9590-619DA4098ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{628C71D5-2C5B-49A6-9590-619DA4098ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{628C71D5-2C5B-49A6-9590-619DA4098ADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1100A3C5-FC25-444F-8171-DFB3A5B6FD2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1100A3C5-FC25-444F-8171-DFB3A5B6FD2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1100A3C5-FC25-444F-8171-DFB3A5B6FD2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1100A3C5-FC25-444F-8171-DFB3A5B6FD2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,7 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Layout\NovaPasta\" />
+    <Folder Include="Pages\NovaPasta\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebAppCorteja.Shared\WebAppCorteja.Shared.csproj" />
   </ItemGroup>
 
 </Project>
