@@ -1,6 +1,6 @@
 /**
- * @filename AdminRoute.js
- * @class AdminRoute
+ * @filename tokenRoute.js
+ * @class TokenRoute
  * @namespace 'src/domain/routes'
  * @description **Rotas para gerenciamento de administradores.**
  * Este arquivo define rotas para interagir com a API de administradores. 
@@ -8,19 +8,18 @@
  * para validar os dados de entrada.
  * 
  * @author [GERSON ALVES DA SILVA]
- * @since [27/06/2024]
+ * @since [15/07/2024]
  */
 'use strict';
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/IndexController');
-const TokenController = require('../../controllers/TokenController').post;
-const middlewaresIndex  = require('../../application/middlewares/index');
+const controller = require('../../controllers/TokenController');
 const autheService = require('../services/AuthServices').authorize;
 
-router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
-router.post('/login',controller.login, TokenController);
+//router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
+router.get('/', controller.get);
+router.post('/', controller.post);
 
 
 

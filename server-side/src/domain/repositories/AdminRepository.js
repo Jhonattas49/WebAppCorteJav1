@@ -34,18 +34,18 @@ exports.authenticate = async (data) => {
         // Procurar no modelo Recorded pelo email
         const recorded = await Recorded.findOne({ email: data.email });
         if (!recorded) {
-            return { success: false, message: 'Registro não encontrado!' };
+            return { success: false, message: 'Erro de login e senha', data: null };
         }
         // Procurar usuário associado ao recorded
         const user = await User.findOne({ recorded: recorded.id });
 
         if (!user || !user.isActive) {
-            return { success: false, message: 'Usuário não encontrado!' };
+            return { success: false, message: 'Entre em contato com adiminstrador do sistema',data: null };
         }
    
         // Verificar se a lista de senhas não está vazia
         if (!user.password || user.password.length === 0) {
-            return { success: false, message: 'Nenhuma senha cadastrada para o usuário!' };
+            return { success: false, message: 'Erro de login e senha', data: null };
         }      
 
         // Obter a última senha da lista de senhas
@@ -54,11 +54,11 @@ exports.authenticate = async (data) => {
         // Comparar senha utilizando a última senha cadastrada
         const passwordMatch = comparePassword.comparePassword(data.password, latestPassword);
         if (!passwordMatch) {
-            return { success: false, message: 'Senha incorreta!' };
+            return { success: false, message: 'Erro de login e senha', data: null };
         }
 
         // Retornar usuário autenticado
-        return { success: true, message: 'Login realizado com sucesso.', recorded: recorded };
+        return { success: true, message: 'Login realizado com sucesso.', data: recorded };
     } catch (error) {
         console.error('Erro na autenticação:', error);
         return { success: false, message: 'Erro ao autenticar usuário!' };

@@ -22,32 +22,32 @@ if (!SALT_KEY) {
     throw new Error('SALT_KEY não definida no arquivo .env');
 }
 
-// Função para gerar o token
-exports.generateToken = async (data) => {
-    const newData = {
-        RecordID: data.recorded._id,
-        Name: data.recorded.name,
-        Contacts: data.recorded.contacts,
-        Roles: data.recorded.role        
-    }
-    console.log('Valor no parametro de entrada:', data);
-    console.log('Gerando token com dados:', newData);
-    const token = jwt.sign(newData, SALT_KEY, { expiresIn: '1d' });
-    console.log('Token gerado:', token);
-    return token;
-}
+// // Função para gerar o token
+// exports.generateToken = async (data) => {
+//     const newData = {
+//         RecordID: data.recorded._id,
+//         Name: data.recorded.name,
+//         Contacts: data.recorded.contacts,
+//         Roles: data.recorded.role        
+//     }
+//     console.log('Valor no parametro de entrada:', data);
+//     console.log('Gerando token com dados:', newData);
+//     const token = jwt.sign(newData, SALT_KEY, { expiresIn: '1d' });
+//     console.log('Token gerado:', token);
+//     return token;
+// }
 
-// Função para decodificar o token
-exports.decodeToken = async (token) => {
-    try {
-        console.log('Decodificando token:', token);
-        const decoded = await jwt.verify(token, SALT_KEY);
-        return decoded;
-    } catch (error) {
-        console.error('Erro ao decodificar token:', error.message);
-        throw new Error('Token Inválido');
-    }
-}
+// // Função para decodificar o token
+// exports.decodeToken = async (token) => {
+//     try {
+//         console.log('Decodificando token:', token);
+//         const decoded = await jwt.verify(token, SALT_KEY);
+//         return decoded;
+//     } catch (error) {
+//         console.error('Erro ao decodificar token:', error.message);
+//         throw new Error('Token Inválido');
+//     }
+// }
 
 // Função para autorizar
 exports.authorize = function (req, res, next) {

@@ -28,25 +28,25 @@ exports.get = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const recorded = await repository.authenticate({
+        const result = await repository.authenticate({
             email: req.body.email,
             password: req.body.password
         });
 
-        if (!recorded.success) {
-            res.status(404).send({
-                message: recorded.message
-            });
+        if (!result.success) {
+            res.status(201).send(result);
             return;
         }
+        
+        req.body.user = result;
+        next(); // Encaminha a requisição para a próxima função de middleware
+        // const token = await tokenServices.generateToken(recorded);
 
-        const token = await tokenServices.generateToken(recorded);
-
-        res.status(200).send({
-            Message: recorded.message,
-            Success: recorded.success,
-            AccessToken: token
-        });
+        // res.status(200).send({
+        //     Message: recorded.message,
+        //     Success: recorded.success,
+        //     AccessToken: token
+        // });
     } catch (e) {
         res.status(500).send({
             result: e,
@@ -55,22 +55,3 @@ exports.login = async (req, res, next) => {
     }
 };
 
-exports.getDataUser = async (req, res, next) => {
-    console.log('Api alcançada no c#')
-    try {
-        // Recupera o token
-        const token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-        if (!token) {
-            return res.status(401).json({ message: 'Token não fornecido' });
-        }
-
-        // Decodifica o token de forma assíncrona
-        const data = await tokenServices.decodeToken(token);
-
-        res.status(200).send(data);
-    } catch (e) {
-        console.error('Erro ao obter dados do usuário:', e.message);
-        res.status(401).json({ message: 'Token Inválido' });
-    }
-};
