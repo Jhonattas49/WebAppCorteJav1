@@ -13,16 +13,45 @@
 'use strict';
 
 const repository = require('../domain/repositories/AdminRepository');
-const { validationResult } = require('express-validator');
+const tokenServices = require('../domain/services/AuthServices');
 
 exports.get = async (req, res, next) => {
     try {
-        res.status(200).send('Seja benvindo');
+        res.status(200).send('Seja bem-vindo');
     } catch (e) {
         res.status(500).send({
             result: e,
             message: 'Falha ao processar sua requisição!'
         });
     }
-}
+};
+
+exports.login = async (req, res, next) => {
+    try {
+        const result = await repository.authenticate({
+            email: req.body.email,
+            password: req.body.password
+        });
+
+        if (!result.success) {
+            res.status(401).send(result);
+            return;
+        }
+        
+        req.body.user = result;
+        next(); // Encaminha a requisição para a próxima função de middleware
+        // const token = await tokenServices.generateToken(recorded);
+
+        // res.status(200).send({
+        //     Message: recorded.message,
+        //     Success: recorded.success,
+        //     AccessToken: token
+        // });
+    } catch (e) {
+        res.status(500).send({
+            result: e,
+            message: 'Falha ao processar sua requisição!'
+        });
+    }
+};
 

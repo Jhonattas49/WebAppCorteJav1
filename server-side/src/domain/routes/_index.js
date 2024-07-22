@@ -10,7 +10,8 @@
 
 module.exports = {
     indexRoute: require('./indexRoute'),
-    CustomerRoute: require('./CustumerRoute'),
-    VenomBotRoute: require('./VenomBotRoute'),
-    AdminRoute: require('./AdminRoute')
+    customerRoute: require('./CustumerRoute'),
+    venomBotRoute: require('./VenomBotRoute'),
+    adminRoute: require('./AdminRoute'),
+    tokenRoute: require('./tokenRoute')
 }

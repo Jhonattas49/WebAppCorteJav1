@@ -11,6 +11,10 @@
 'use strict';
 const mongoose = require('mongoose');
 const User = mongoose.model('User'); 
+const bcrypt = require('bcrypt');
+require('dotenv').config();
+
+const SALT_KEY = process.env.SALT_KEY;
 
 exports.get = async () =>{
     const result= await User.find({});
@@ -18,7 +22,11 @@ exports.get = async () =>{
 };
 
 exports.create = async (data) =>{
-    var user = new User(data);    
+    const hashedPassword = await bcrypt.hash(data.password + SALT_KEY, 10);
+    var user = new User({
+        recorded: data,
+        password: [hashedPassword],
+    });
     return await user.save();
 };
 

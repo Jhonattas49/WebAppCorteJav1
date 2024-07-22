@@ -26,7 +26,7 @@ const RecordedSchema = new Schema({
         isWhatsApp: { type: Boolean, required: true, default: true },
         isActive: { type: Boolean, required: true, default: true }
     }],
-    role: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rele', required: true }],
+    role: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role', required: true }],
     createDate: { type: Date, required: true, default: Date.now },
     isActive: { type: Boolean, required: true, default: true },
 });

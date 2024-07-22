@@ -77,7 +77,6 @@ exports.put = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-
     try {
         const customer = await repository.authenticate({
             email: req.body.email,

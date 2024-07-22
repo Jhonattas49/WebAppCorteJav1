@@ -5,35 +5,38 @@
  * @description **Gerenciamento de tokens de acesso.**
  * Este arquivo define um gerenciador de tokens de acesso para aplicações web. 
  * Ele provê funções para:
- *  * Salvar tokens de acesso no LocalStorage e em um cookie HttpOnly seguro.
- *  * Recuperar tokens de acesso do LocalStorage.
- *  * Limpar tokens de acesso do LocalStorage e do cookie.
+ *  * Gerar tokens de acesso JWT.
+ *  * Decodificar tokens JWT.
  * 
  * @author [GERSON ALVES DA SILVA]
  * @since [27/06/2024]
  */
+const jwt = require('jsonwebtoken');
+require('dotenv').config(); // Carregar variáveis de ambiente
+const SALT_KEY = process.env.SALT_KEY;
 'use strict';
 
-exports.salvarToken = (token)=> {
-    // Salva o token no LocalStorage
-    localStorage.setItem('token', token);
-
-    // Configura o cookie HttpOnly com um identificador seguro do token
-    document.cookie = `token_id=${token}; Secure; HttpOnly; SameSite=Strict`;
+if (!SALT_KEY) {
+    throw new Error('SALT_KEY não definida no arquivo .env');
 }
 
-// Função para recuperar o token do LocalStorage
-exports.recuperarToken= ()=> {
-    // Recupera o token do LocalStorage
-    const token = localStorage.getItem('token');
+// Função para gerar o token JWT
+exports.generateToken = async (user) => {
+    const newData = {
+        RecordID: user.data._id,
+        Name: user.data.name,
+        Email: user.data.email,
+        Contacts: user.data.contacts,
+        Roles: user.data.role        
+    };
+    const token = jwt.sign(newData, SALT_KEY, { expiresIn: '1d' });
     return token;
-}
+};
 
-// Função para limpar o token do LocalStorage e do cookie
-exports.limparToken = () => {
-    // Limpa o token do LocalStorage
-    localStorage.removeItem('token');
+// Função para decodificar o token JWT e verificar expiração
+exports.decodeToken = async (token) => {
+    const data = await jwt.verify(token, SALT_KEY);
+    return data;
+};
 
-    // Define o cookie HttpOnly com expiração passada para remover
-    document.cookie = `token_id=; Secure; HttpOnly; SameSite=Strict; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-}
+

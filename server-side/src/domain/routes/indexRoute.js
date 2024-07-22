@@ -15,9 +15,15 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/IndexController');
+const TokenController = require('../../controllers/TokenController').post;
 const middlewaresIndex  = require('../../application/middlewares/index');
+const autheService = require('../services/AuthServices').authorize;
 
 router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
+router.post('/login',controller.login, TokenController);
+
+
+
 
 
 module.exports = router;
