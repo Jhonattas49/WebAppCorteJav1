@@ -1,3 +1,5 @@
 
 #Retirando o pacote de dependencia
 node_modules/
+# Ignorando o arquivo .vs
+client-side/.vs

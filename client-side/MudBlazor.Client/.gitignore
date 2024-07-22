@@ -1,0 +1,158 @@
+# Usuário-específicos
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# MonoDevelop/Xamarin Studio
+*.userprefs
+
+# Resultados de compilação
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Cache/opções do Visual Studio 2015/2017
+.vs/
+
+# Arquivos estáticos do wwwroot (se as tarefas os criarem)
+#wwwroot/
+
+# Arquivos gerados automaticamente pelo Visual Studio 2017
+Generated\ Files/
+
+# Resultados de teste do MSTest
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Resultados de teste do NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Resultados de compilação de um projeto ATL
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# Resultados de benchmark
+BenchmarkDotNet.Artifacts/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# StyleCop
+StyleCopReport.xml
+
+# Arquivos compilados pelo Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Chutzpah
+_Chutzpah*
+
+# Cache de arquivos Visual C++
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Arquivos de rastreamento do Visual Studio
+*.e2e
+
+# TFS 2012 Local Workspace
+$tf/
+
+# Guidance Automation Toolkit
+*.gpState
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+.vs
+
+# Ícones MudBlazor
+MudBlazor.Icons/
+
+# Arquivos temporários
+*.temp
+
+# Arquivos de log
+*.log
+
+# Arquivos de backup
+*.bak
+
+# Arquivos de rascunho
+*.draft
+
+# Arquivos de configuração local
+*.local
+
+# Arquivos de cache
+*.cache
+
+# Pastas de pacotes
+node_modules/
+npm-shrinkwrap.json
+yarn.lock
+
+# Diretórios de desenvolvimento
+.vscode/
+.idea/

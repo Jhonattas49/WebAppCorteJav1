@@ -34,7 +34,7 @@ exports.authenticate = async (data) => {
         // Procurar no modelo Recorded pelo email
         const recorded = await Recorded.findOne({ email: data.email });
         if (!recorded) {
-            return { success: false, message: 'Erro de login e senha', data: null };
+            return { success: false, message: 'Login ou senha incorreto', data: null };
         }
         // Procurar usuário associado ao recorded
         const user = await User.findOne({ recorded: recorded.id });
@@ -45,7 +45,7 @@ exports.authenticate = async (data) => {
    
         // Verificar se a lista de senhas não está vazia
         if (!user.password || user.password.length === 0) {
-            return { success: false, message: 'Erro de login e senha', data: null };
+            return { success: false, message: 'Login ou senha incorreto', data: null };
         }      
 
         // Obter a última senha da lista de senhas
@@ -54,7 +54,7 @@ exports.authenticate = async (data) => {
         // Comparar senha utilizando a última senha cadastrada
         const passwordMatch = comparePassword.comparePassword(data.password, latestPassword);
         if (!passwordMatch) {
-            return { success: false, message: 'Erro de login e senha', data: null };
+            return { success: false, message: 'Login ou senha incorreto', data: null };
         }
 
         // Retornar usuário autenticado

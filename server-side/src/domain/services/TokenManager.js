@@ -35,22 +35,8 @@ exports.generateToken = async (user) => {
 
 // Função para decodificar o token JWT e verificar expiração
 exports.decodeToken = async (token) => {
-    try {
-        const decoded = await jwt.verify(token, SALT_KEY) || false;
-
-        if (!decoded) {
-            return { message: "Não à uma sessão com este usuário!", statusCode: 401 };
-        }
-
-        if (decoded.exp <= Math.floor(Date.now() / 1000)) {
-            throw new Error('Sessão expirada. Por favor, faça login novamente.');
-        }
-
-        return { decoded, statusCode: 200 };
-    } catch (error) {
-        //console.error('Erro ao decodificar token:', error.message);
-        throw new Error(error.message === 'Sessão expirada. Por favor, faça login novamente.' ? 'Sessão expirada. Por favor, faça login novamente.' : 'Sessão inválida. Por favor, faça login novamente.');
-    }
+    const data = await jwt.verify(token, SALT_KEY);
+    return data;
 };
 
 

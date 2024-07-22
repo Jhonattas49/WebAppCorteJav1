@@ -34,7 +34,7 @@ exports.login = async (req, res, next) => {
         });
 
         if (!result.success) {
-            res.status(201).send(result);
+            res.status(401).send(result);
             return;
         }
         
