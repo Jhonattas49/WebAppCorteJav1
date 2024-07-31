@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using MudBlazor.Client.Components;
 using MudBlazor.Client.Domain;
+using MudBlazor.Client.Services.AuthState;
 using MudBlazor.Client.Services.Repository;
 using MudBlazor.Client.Sevices.Token;
+using MudBlazor.Client.Shared.Attributes;
 using MudBlazor.Client.Shared.Models;
+using MudBlazor.Client.Shared.Services;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,11 +89,15 @@ builder.Services.AddScoped<IUserStore<IdentityUser>, CustomUserStore>();
 builder.Services.AddScoped<IRoleStore<IdentityRole>, CustomRoleStore>();
 #endregion
 
-// Register services
+//Register services
 builder.Services.AddScoped<AddUserRequest>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<AuthorizationAttribute>();
+builder.Services.AddScoped<LoadJSInterop>();
+builder.Services.AddSingleton<UserSessionState>();
+builder.Services.AddSingleton<ComponentTracker>();
 builder.Services.AddAuthorizationCore(options =>
 {
     options.AddPolicy("RequireAuthenticatedUser", policy =>
@@ -98,12 +105,12 @@ builder.Services.AddAuthorizationCore(options =>
         policy.RequireAuthenticatedUser();
     });
 });
-//builder.Services.AddScoped<CustomAuthenticationStateProvider>(); // Ensure this is registered
+
 // Configura a autenticação
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthenticationStateProvider>());
 
-
+//await builder.Build().RunAsync();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline

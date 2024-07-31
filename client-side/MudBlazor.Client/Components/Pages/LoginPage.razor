@@ -1,6 +1,5 @@
-﻿@page "/login"
-
-@inherits Componests
+﻿@layout Layout.MainLayoutIndex
+@page "/login"
 
 <PageTitle>Login</PageTitle>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
@@ -60,10 +59,14 @@
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     bool isShow;
 
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var logout = await Logout();
+    // }
+
     private async void OnValidSubmit(EditContext context)
     {
         await LoginAsync((InputLoginRequest)context.Model);
-        StateHasChanged();
     }
 
     void ButtonTestclick()

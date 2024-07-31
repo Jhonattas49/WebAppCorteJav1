@@ -1,0 +1,38 @@
+﻿@implements IDisposable
+
+@if (!IsInitialized)
+{
+    <MudGrid>
+
+        @for (int i = 0; i < 6; i++)
+        {
+            <MudItem xs="12" sm="6" md="4" lg="3" Style="margin-top: 10vh">
+                <MudSkeleton />
+                <MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="200px" Height="110px" />
+            </MudItem>
+        }
+    </MudGrid>
+
+}
+else
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+    private bool IsInitialized { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        IsInitialized = AttributeAuthorizedToStart;
+        StateHasChanged();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    public void Dispose()
+    {
+        StateHasChanged();
+    }
+}
