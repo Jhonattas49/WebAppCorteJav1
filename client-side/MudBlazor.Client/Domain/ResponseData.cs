@@ -15,11 +15,10 @@
         public ResponseData()
         {
         }
-        public ResponseData(string message, bool success, string token)
+        public ResponseData(string message, bool success)
         {
             Success = success;
             Message = message;
-            Token = token;
         }
         // Construtor com todos os parâmetros
         public ResponseData(string message, bool success, string token, T data)

@@ -1,10 +1,6 @@
 ﻿using MudBlazor.Client.Domain;
 using MudBlazor.Client.Sevices.Token;
 using MudBlazor.Client.Shared.Models;
-using System;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 
 namespace MudBlazor.Client.Services.Repository
 {
@@ -76,6 +72,38 @@ namespace MudBlazor.Client.Services.Repository
                     errorCode: "GENERAL_ERROR"
                 );
             }
+        }
+
+        public async Task<ResponseData<AddUserRequest>> ValidateSession()
+        {
+            // Obtém o token
+            var token = await _tokenService.GetTokenAsync();
+            // Valida o token
+            var result = _authService.ValidToken(token);
+
+            // Se o token não for válido
+            if (!result)
+            {         
+                // Retorna uma resposta indicando que a sessão expirou
+                return new ResponseData<AddUserRequest>(
+                    message: "Sua sessão expirou. Por favor, faça login novamente para continuar.",
+                    error: 401,
+                    errorCode: "SESSION_EXPIRED"
+                );
+            }
+
+            // Retorna uma resposta indicando que a sessão é válida
+            return new ResponseData<AddUserRequest>(
+                message: "Sessão regular.",
+                success: true
+            );
+        }
+
+        public async Task<bool> Logout()
+        {
+            // Remove o token armazenado
+            await _tokenService.RemoveTokenAsync();
+            return (await _tokenService.GetTokenAsync() != null);
         }
     }
 }

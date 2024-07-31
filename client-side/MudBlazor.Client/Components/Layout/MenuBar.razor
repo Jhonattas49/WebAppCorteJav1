@@ -1,13 +1,50 @@
-﻿
+﻿@implements IDisposable
+
 <MudButton Variant="Variant.Text" Color="Color.Default" Href="/">Home</MudButton>
-<MudButton Variant="Variant.Text" Color="Color.Default" Href="#">SOBRE</MudButton>
-<MudMenu  Label="SERVIÇOS">
-    <MudMenuItem Href="#">Produtos</MudMenuItem>
-    <MudDivider />
-    <MudMenuItem Href="#">Cria sua conta</MudMenuItem>
-    <MudMenuItem Href="login">Login</MudMenuItem>   
+<MudButton Variant="Variant.Text" Color="Color.Default" Href="sobre">SOBRE</MudButton>
+<MudMenu Label="Produtos">
+    @*  Criar menu para os produtos *@
 </MudMenu>
-
+<MudSpacer />
+@if (!_statusSession)
+{
+    <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+}
+else
+{
+    if (_userSessionState != null && _userSessionState?.UserSession != null)
+    {
+        <MudMenu Label="@_userSessionState.UserSession!.Name" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Person" IconColor="Color.Default">
+            <MudMenuItem Href="/admin">Minha conta</MudMenuItem>
+            <MudMenuItem>Perfil</MudMenuItem>
+            <MudMenuItem>Meus serviços</MudMenuItem>
+            <MudMenuItem>Produtos</MudMenuItem>
+            <MudMenuItem OnClick="(() => Logout())">Sair</MudMenuItem>
+            @if (_userSessionState.StatusSession == false)
+            {
+                <MudDivider />
+                <MudText Style="font-size:9px" Typo="Typo.caption" Color="Color.Error">Sessão expirada,<MudLink Style="font-size:9px" Href="/login">Clique aqui</MudLink> para fazer login novamente.</MudText>
+            }
+        </MudMenu>
+    }
+    else
+    {
+        <MudButton Href="/login" StartIcon="@Icons.Material.Filled.Person" Color="Color.Default" Variant="Variant.Text">Login</MudButton>
+    }
+}
+@ChildContent
 @code {
+    private bool _statusSession { get; set; } = false;
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+    public void Dispose()
+    {
+        StateHasChanged();
+    }
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        _statusSession = true;
+        StateHasChanged();
+        return base.OnAfterRenderAsync(firstRender);
+    }
 }

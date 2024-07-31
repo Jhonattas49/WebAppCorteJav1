@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -40,6 +41,20 @@ namespace MudBlazor.Client.Domain
             if (!result.Succeeded)
                 throw new ArgumentException("Login ou senha incorreto");
         }
+
+        public bool ValidToken(string token)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configOptions.Key));
+            var result = new TokenJWTBuilder()
+                .AddToken(token)
+                .AddIssuer(_configOptions.Issuer)
+                .AddAudience(_configOptions.Audience)
+                .AddSecurityKey(key)
+                .IsTokenValid();
+
+            return result;                
+        }
+
         public string GenerateToken(AddUserRequest user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configOptions.Key));
