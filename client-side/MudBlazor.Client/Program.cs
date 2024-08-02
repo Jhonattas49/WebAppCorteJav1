@@ -105,7 +105,8 @@ builder.Services.AddAuthorizationCore(options =>
         policy.RequireAuthenticatedUser();
     });
 });
-
+// Configurar AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 // Configura a autenticação
 builder.Services.AddScoped<CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthenticationStateProvider>());

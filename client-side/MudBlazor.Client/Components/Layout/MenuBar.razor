@@ -18,8 +18,7 @@ else
             <MudMenuItem Href="/admin">Minha conta</MudMenuItem>
             <MudMenuItem>Perfil</MudMenuItem>
             <MudMenuItem>Meus serviços</MudMenuItem>
-            <MudMenuItem>Produtos</MudMenuItem>
-            <MudMenuItem OnClick="(() => Logout())">Sair</MudMenuItem>
+            <MudMenuItem OnClick="_logout">Sair</MudMenuItem>
             @if (_userSessionState.StatusSession == false)
             {
                 <MudDivider />
@@ -46,5 +45,11 @@ else
         _statusSession = true;
         StateHasChanged();
         return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task _logout()
+    {
+       await Logout();
+        _navigation.NavigateTo("/");
     }
 }

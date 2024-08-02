@@ -7,7 +7,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
         <MudSpacer />
-        <MudButton OnClick="_Logout" StartIcon="@Icons.Material.Filled.Person" Color="Color.Default" Variant="Variant.Text">Sair</MudButton>
+        <MudButton OnClick="_logout" StartIcon="@Icons.Material.Filled.Person" Color="Color.Default" Variant="Variant.Text">Sair</MudButton>
         <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
     </MudAppBar>
     <AuthorizationComponent>
@@ -101,11 +101,10 @@
         false => Icons.Material.Outlined.DarkMode,
     };
 
-    private async Task _Logout()
+    private async Task _logout()
     {
         await Logout();
         _navigation.NavigateTo("/");
-        StateHasChanged();
     }
 }
 

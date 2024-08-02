@@ -1,66 +1,119 @@
 WebAppCorteJa
-|server-side
-|	|_bin
-|	|___|server.js
-|	|_nodem_modules
-|	|___|*
-|	|_src
-|	|___|application
-|	|___|___|middlewares
-|	|___|___|___|index.js
-|	|___|controllers
-|	|___|___|AdminController.js
-|			|CustomerController.js
-|			|IndexController.js
-|			|VenomBotController.js
-|	|___|domain
-|	|___|___|DTOs
-|	|___|___|___|CustomerDto.js
-|				|UsersRootDto.js
-|	|___|___|repositories
-|	|___|___|___|AdminRepository.js
-|				|CustomerRepository.js
-|				|GrupsPermissionRepository.js
-|				|RecordedRepository.js
-|				|RoleRepository.js
-|				|UserRepository.js
-|	|___|___|routes
-|	|___|___|___|_index.js
-|				|AdminRoute.js
-|				|CustumerRoute.js
-|				|indexRoute.js
-|				|VenomBotRoute.js
-|	|___|___|services
-|	|___|___|___|AuthServices.js
-|				|TokenManager.js|
-|	|___|shared
-|	|___|___|enums
-|	|___|___|___|ContactEnums.js
-|				|PassWordEnum.js
-|	|___|___|models
-|	|___|___|___|_index.js
-|			|Customer.js
-|				|Recorded.js
-|				|Role.js
-|				|User.js
-|	|___|___|public
-|	|___|___|___|GenerateNumber.js
-|				|Global.js
-|				|Permission.js
-|	|___|___|utils
-|	|___|___|___|FindKeyByValue.js
-|				|StringComparison.js
-|	|___|___|validators
-|	|___|___|___|CustomerValidator.js
-|	|___|app.js
-|	|_token
-|	|___|*
-|	|_.env
-|	|_.gitignore
-|	|_package-lock.json
-|	|_package.json
-|client-side
-|   |_antd-demo
-|   |___|*
-|   |_MudBlazorApp
-|
+server-side/
+├── bin/
+│   └── server.js
+├── node_modules/
+│   └── *
+├── src/
+│   ├── application/
+│   │   └── middlewares/
+│   │       └── index.js
+│   ├── controllers/
+│   │   ├── AdminController.js
+│   │   ├── CustomerController.js
+│   │   ├── IndexController.js
+│   │   └── VenomBotController.js
+│   ├── domain/
+│   │   ├── DTOs/
+│   │   │   ├── CustomerDto.js
+│   │   │   └── UsersRootDto.js
+│   │   ├── repositories/
+│   │   │   ├── AdminRepository.js
+│   │   │   ├── CustomerRepository.js
+│   │   │   ├── GrupsPermissionRepository.js
+│   │   │   ├── RecordedRepository.js
+│   │   │   ├── RoleRepository.js
+│   │   │   └── UserRepository.js
+│   │   ├── routes/
+│   │   │   ├── _index.js
+│   │   │   ├── AdminRoute.js
+│   │   │   ├── CustumerRoute.js
+│   │   │   ├── indexRoute.js
+│   │   │   └── VenomBotRoute.js
+│   │   ├── services/
+│   │   │   ├── AuthServices.js (Será modificado para o MudBlazor)
+│   │   │   └── TokenManager.js (Será modificado para o MudBlazor)
+│   ├── shared/
+│   │   ├── enums/
+│   │   │   ├── ContactEnums.js
+│   │   │   └── PassWordEnum.js
+│   │   ├── models/
+│   │   │   ├── _index.js
+│   │   │   ├── Customer.js
+│   │   │   ├── Recorded.js
+│   │   │   ├── Role.js
+│   │   │   └── User.js
+│   │   ├── public/
+│   │   │   ├── GenerateNumber.js
+│   │   │   ├── Global.js
+│   │   │   └── Permission.js
+│   │   ├── utils/
+│   │   │   ├── FindKeyByValue.js
+│   │   │   └── StringComparison.js
+│   │   └── validators/
+│   │       └── CustomerValidator.js
+│   ├── app.js
+├── token/
+│   └── *
+├── .env
+├── .gitignore
+├── package-lock.json
+└── package.json
+
+client-side/
+├── antd-demo/
+│   └── *
+├── MudBlazor.Client/
+│   ├── Connect Service/
+│   │   └── *
+│   ├── Dependências/
+│   │   └── *
+│   ├── Properties/
+│   │   └── launchSettings.json
+│   ├── wwwroot/
+│   │   └── favicon.ico
+│   ├── Components/
+│   │   ├── Layout/
+│   │   │   ├── MainLayout.razor
+│   │   │   ├── NavMenu.razor
+│   │   ├── Pages/
+|	|	|	└── Admin
+│   │   │   |	└── Index.razor
+|	|	|	├── ComponestsPage
+│   │   │   |	└── AuthorizationComponent.razor
+|	|	|	└── Home.razor
+|	|	|	└── LoginPage.razor
+│   │   │   └── Sobre
+|	|	|	└── Error.razor
+│   │   ├── _Imports.razor
+│   │   ├── App.razor
+│   │   ├── Routes.razor
+|	|	├── Componests.cs
+│   ├── Domain/
+│   │   ├── AuthService.cs
+│   │   ├── ConfigurationSettings.cs
+│   │   ├── CustomRoleStore.cs
+│   │   ├── CustomUserStore.cs
+│   │   ├── ResponseData.cs
+│   │   ├── SaltKeyService.cs
+│   ├── Services/
+│   │   ├── Interfaces/
+│   │   │   └── ?
+│   │   ├── Repository/
+│   │   │   └── LoginService.cs
+│   │   ├── Token/
+│   │   │   └── JwtSecurityKey.cs
+│   │   │   └── TokenJWT.cs
+│   │   │   └── TokenJWTBuilder.cs
+|	|	|	└── TokenService.cs
+│   ├── Shared/
+│   │   ├── Entities/
+│   │   │   └── ApplicationUser.cs
+│   │   │   └── Contact.cs
+│   │   │   └── Record.cs
+│   │   ├── Models/
+│   │   │   ├── AddUserRequest.cs
+│   │   │   └── InputLoginRequest.cs
+│   ├── appsettings.json
+│   ├── Program.cs
+
