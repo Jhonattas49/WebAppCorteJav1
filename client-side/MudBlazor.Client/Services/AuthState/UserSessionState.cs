@@ -33,25 +33,4 @@ namespace MudBlazor.Client.Services.AuthState
       
         private void NotifyStateChanged() => OnChange?.Invoke();
     }
-
-    //public class UserSessionState
-    //{
-    //    private AddUserRequest? _userSession;
-    //    private bool? _statusSession;
-
-    //    public event Action? OnChange;
-
-    //    public AddUserRequest? UserSession
-    //    {
-    //        get => _userSession;
-    //        set
-    //        {
-    //            _userSession = value;
-    //            NotifyStateChanged();
-    //        }
-    //    }
-
-    //    private void NotifyStateChanged() => OnChange?.Invoke();
-
-    //}
 }

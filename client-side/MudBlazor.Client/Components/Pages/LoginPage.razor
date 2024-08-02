@@ -1,6 +1,7 @@
 ﻿@layout Layout.MainLayoutIndex
 @page "/login"
 
+
 <PageTitle>Login</PageTitle>
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -34,8 +35,7 @@
                     <MudTextField Label="Senha" HelperText="Digite sua senha" Class="mt-3"
                                   @bind-Value="model.Password"
                                   For="@(() => model.Password)"   
-                                  Immediate="true"
-                                  
+                                  Immediate="true"                                  
                                   InputType="@PasswordInput"
                                   Adornment="Adornment.End"
                                   AdornmentIcon="@PasswordInputIcon"
@@ -44,7 +44,7 @@
                 </MudCardContent>
                 <MudCardActions Class="d-flex justify-end flex-grow-1 gap-4">
                     <div class="col-5">
-                        <MudButton Variant="Variant.Text" Color="Color.Info" Class="ml-auto">Castrar-se</MudButton>
+                        <MudButton Href="register" Variant="Variant.Text" Color="Color.Info" Class="ml-auto">Castrar-se</MudButton>
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Logar</MudButton>
                     </div>
                 </MudCardActions>
@@ -54,22 +54,12 @@
 </EditForm>
 
 @code {
-    InputType PasswordInput = InputType.Password;
     private InputLoginRequest model { get; set; } = new();
+    InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     bool isShow;
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     var logout = await Logout();
-    // }
-
-    private async void OnValidSubmit(EditContext context)
-    {
-        await LoginAsync((InputLoginRequest)context.Model);
-    }
-
-    void ButtonTestclick()
+    
+    private void ButtonTestclick()
     {
         @if (isShow)
         {
@@ -83,5 +73,10 @@
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;
         }
+    }
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        await LoginAsync((InputLoginRequest)context.Model);
     }
 }

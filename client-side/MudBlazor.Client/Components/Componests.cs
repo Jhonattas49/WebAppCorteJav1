@@ -38,14 +38,22 @@ namespace MudBlazor.Client.Components
                 {
                     await LoadUserSessionAsync();
                     StateHasChanged();
-
                 }
+
+                //Se a sessão do usuário é diferente de null, StatusSession, verdadeiro e a página que esta querendo
+                //acessar é login direciona para admin
+                if (_userSessionState != null && _userSessionState.StatusSession != null && _userSessionState.StatusSession!.Value && _navigation.Uri.Contains("/login"))
+                {
+                    _navigation.NavigateTo("/admin");
+                    return;
+                }
+
 
                 //Se esta tentando acessar uma area protegida 
                 if (_statusAuthorized != null && _statusAuthorized.Value)
                 {
                     //Se o status de userSession é null ou userSessionState.StatusSession é falso
-                    if (_userSessionState.StatusSession == null)
+                    if (_userSessionState!.StatusSession == null)
                     {
                         _navigation.NavigateTo("/");
                         ShowMessage("Agradecemos seu interesse em nosso conteúdo! No entanto, a página que você está buscando exige um login específico. Para ter acesso a essa área exclusiva, por favor, faça o login com suas credenciais ou entre em contato conosco para obter mais informações.",
@@ -133,7 +141,7 @@ namespace MudBlazor.Client.Components
                 if (!await _loginService.Logout())
                 {
                     _userSessionState.UserSession = null!;
-                    _userSessionState = null!;
+                    _userSessionState.StatusSession = null!;
                 }
             return false;
         }
