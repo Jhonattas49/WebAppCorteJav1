@@ -19,7 +19,7 @@ const TokenController = require('../../controllers/TokenController').post;
 const middlewaresIndex  = require('../../application/middlewares/index');
 const autheService = require('../services/AuthServices').authorize;
 
-router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
+router.get('/',  middlewaresIndex.CreateSupUser, controller.get);//Fazer um aesso a esta rota no sistema
 router.post('/login',controller.login, TokenController);
 
 

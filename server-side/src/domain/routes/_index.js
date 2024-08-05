@@ -13,5 +13,7 @@ module.exports = {
     customerRoute: require('./CustumerRoute'),
     venomBotRoute: require('./VenomBotRoute'),
     adminRoute: require('./AdminRoute'),
-    tokenRoute: require('./tokenRoute')
+    tokenRoute: require('./tokenRoute'),
+    recordRoute: require('./recordRoute')
+
 }
