@@ -9,7 +9,7 @@ namespace MudBlazor.Client.Domain
         public Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken)
         {
             if (_roles.ContainsKey(role.Id))
-                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "Role already exists." }));
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "ApplicationRole already exists." }));
 
             _roles[role.Id] = role;
             return Task.FromResult(IdentityResult.Success);
@@ -18,7 +18,7 @@ namespace MudBlazor.Client.Domain
         public Task<IdentityResult> DeleteAsync(IdentityRole role, CancellationToken cancellationToken)
         {
             if (!_roles.ContainsKey(role.Id))
-                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "Role does not exist." }));
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "ApplicationRole does not exist." }));
 
             _roles.Remove(role.Id);
             return Task.FromResult(IdentityResult.Success);
@@ -68,7 +68,7 @@ namespace MudBlazor.Client.Domain
         public Task<IdentityResult> UpdateAsync(IdentityRole role, CancellationToken cancellationToken)
         {
             if (!_roles.ContainsKey(role.Id))
-                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "Role does not exist." }));
+                return Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "ApplicationRole does not exist." }));
 
             _roles[role.Id] = role;
             return Task.FromResult(IdentityResult.Success);

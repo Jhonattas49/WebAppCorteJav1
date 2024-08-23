@@ -1,7 +1,8 @@
 ﻿using MudBlazor.Client.Shared.Attributes;
+using MudBlazor.Client.Shared.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace MudBlazor.Client.Shared.Entities
+namespace MudBlazor.Client.Shared.Models
 {
     public class ApplicationUser
     {

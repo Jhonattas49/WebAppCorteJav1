@@ -1,0 +1,54 @@
+﻿
+<MudFab Size="Size.Small" Disabled="@_disableAdd" StartIcon="@Icons.Material.Filled.Add" OnClick="@(()=>OpenDialog.InvokeAsync())" Color="Color.Primary" />
+<MudFab Size="Size.Small" Disabled="@_disableUpdate" StartIcon="@_icons" OnClick="@(()=>Submit.InvokeAsync())" Color="Color.Tertiary" />
+<MudFab Size="Size.Small" Disabled="@_disableDelete" StartIcon="@Icons.Material.Filled.Delete" OnClick="@(()=>SubmitDel.InvokeAsync())" Color="Color.Error" />
+
+
+@code{
+    [Parameter] public ApplicationRole? Model { get; set; }
+    [Parameter] public EventCallback<ApplicationRole> ModelChange { get; set; }
+    [Parameter] public bool ActiveEdit { get; set; } 
+    [Parameter] public EventCallback Submit { get; set; }
+    [Parameter] public EventCallback OpenDialog { get; set; }
+    [Parameter] public EventCallback SubmitDel { get; set; }
+
+    private bool _disableAdd = true;
+    private bool _disableDelete = true;
+    private bool _disableUpdate = true;
+    private string _icons = Icons.Material.Filled.Save;
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await ValidateDisabled();
+        StateHasChanged();
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task ValidateDisabled()
+    {
+        if (Model == null)
+        {
+            _disableAdd = false;
+            _disableDelete = true;
+            _disableUpdate = true;
+            _icons = Icons.Material.Filled.Save;
+        }
+        else if (!string.IsNullOrEmpty(Model.Name) && string.IsNullOrEmpty(Model._id))
+        {
+            _disableAdd = true;
+            _disableDelete = true;
+            _disableUpdate = !ActiveEdit;
+            _icons = Icons.Material.Filled.Save;
+        }
+        else if (!string.IsNullOrEmpty(Model._id))
+        {
+            _disableAdd = true;
+            _disableDelete = false;
+            _disableUpdate = !ActiveEdit;
+            _icons = Icons.Material.Filled.SaveAs;
+        }
+        await ModelChange.InvokeAsync(Model);
+    }
+}

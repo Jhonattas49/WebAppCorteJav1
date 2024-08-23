@@ -1,4 +1,4 @@
-# Usuário-específicos
+# Usuï¿½rio-especï¿½ficos
 *.suo
 *.user
 *.userosscache
@@ -7,7 +7,7 @@
 # MonoDevelop/Xamarin Studio
 *.userprefs
 
-# Resultados de compilação
+# Resultados de compilaï¿½ï¿½o
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -23,10 +23,10 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-# Cache/opções do Visual Studio 2015/2017
+# Cache/opï¿½ï¿½es do Visual Studio 2015/2017
 .vs/
 
-# Arquivos estáticos do wwwroot (se as tarefas os criarem)
+# Arquivos estï¿½ticos do wwwroot (se as tarefas os criarem)
 #wwwroot/
 
 # Arquivos gerados automaticamente pelo Visual Studio 2017
@@ -41,7 +41,7 @@ Generated\ Files/
 TestResult.xml
 nunit-*.xml
 
-# Resultados de compilação de um projeto ATL
+# Resultados de compilaï¿½ï¿½o de um projeto ATL
 [Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
@@ -127,10 +127,10 @@ _ReSharper*/
 _TeamCity*
 .vs
 
-# Ícones MudBlazor
+# ï¿½cones MudBlazor
 MudBlazor.Icons/
 
-# Arquivos temporários
+# Arquivos temporï¿½rios
 *.temp
 
 # Arquivos de log
@@ -142,7 +142,7 @@ MudBlazor.Icons/
 # Arquivos de rascunho
 *.draft
 
-# Arquivos de configuração local
+# Arquivos de configuraï¿½ï¿½o local
 *.local
 
 # Arquivos de cache
@@ -153,6 +153,9 @@ node_modules/
 npm-shrinkwrap.json
 yarn.lock
 
-# Diretórios de desenvolvimento
+# Diretï¿½rios de desenvolvimento
 .vscode/
 .idea/
+
+# Retirando appsettings.json
+appsettings.json

@@ -65,9 +65,12 @@ app.use(function (req, res, next) {
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', routes.indexRoute);
+app.use('/record', routes.recordRoute);
 app.use('/generate-token', routes.tokenRoute);
 app.use('/bot', routes.venomBotRoute);
 app.use('/customers', routes.customerRoute);
+app.use('/Roles', routes.roleRoute);
+app.use('/Permissions', routes.permissionRoute);
 // Rota de login com encaminhamento para geração de token
 //app.post('/login', routes.authController.login, tokenController.post);
 

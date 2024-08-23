@@ -23,7 +23,8 @@ namespace MudBlazor.Client.Components
         [Inject] private ISnackbar Snackbar { get; set; } = default!;
         [Inject] public LoadJSInterop _loadJSInterop { get; set; } = default!;
         [Inject] public UserSessionState _userSessionState { get; set; } = default!;
-        [Inject] public AuthorizationAttribute _hasAuthorization { get; set; } = default!;
+        [Inject] public AuthorizationAttribute _hasAuthorization { get; set; } = default!;       
+        [Inject] public IDialogService _dialogService { get; set; } = default!;
 
         private bool? _statusAuthorized = null!;
         public bool AttributeAuthorizedToStart { get; set; }//O atributo só informa se o componente pode iniciar
@@ -146,7 +147,7 @@ namespace MudBlazor.Client.Components
             return false;
         }
 
-        private void ShowMessage(string mensagem, Severity type, int duration = 5000)
+        public void ShowMessage(string mensagem, Severity type, int duration = 5000)
         {
             Snackbar.Add(mensagem, type, config =>
             {
@@ -156,5 +157,7 @@ namespace MudBlazor.Client.Components
             });
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomStart;
         }
+
+     
     }
 }

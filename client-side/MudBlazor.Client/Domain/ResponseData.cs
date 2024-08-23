@@ -5,7 +5,6 @@
         public string? Message { get; set; }
         public bool Success { get; set; }
         public T? Data { get; set; }
-        public string? Token { get; set; }
         public object Error { get; set; } = default!;
         public string? ErrorCode { get; set; }
 
@@ -20,21 +19,15 @@
             Success = success;
             Message = message;
         }
-        // Construtor com todos os parâmetros
-        public ResponseData(string message, bool success, string token, T data)
-        {
-            Success = success;
-            Data = data;
-            Message = message;
-            Token = token;
-        }
+        
 
         // Outros construtores conforme sua necessidade
         public ResponseData(string message, bool success, T data)
         {
+            Message = message;
             Success = success;
             Data = data;
-            Message = message;
+
         }
 
         public ResponseData(string message, object error)

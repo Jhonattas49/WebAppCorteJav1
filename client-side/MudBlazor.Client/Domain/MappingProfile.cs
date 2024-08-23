@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MudBlazor.Client.Shared.Entities;
+using MudBlazor.Client.Shared.Models;
 
 namespace MudBlazor.Client.Domain
 {
@@ -9,6 +10,7 @@ namespace MudBlazor.Client.Domain
         {
             CreateMap<Record, ApplicationUser>()
                 .ReverseMap();
+
         }
     }
 }

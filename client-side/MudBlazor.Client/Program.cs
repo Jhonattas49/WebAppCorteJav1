@@ -94,6 +94,7 @@ builder.Services.AddScoped<AddUserRequest>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<AuthorizationAttribute>();
 builder.Services.AddScoped<LoadJSInterop>();
 builder.Services.AddSingleton<UserSessionState>();
