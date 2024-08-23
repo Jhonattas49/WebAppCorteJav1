@@ -15,6 +15,22 @@
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+@*     <script>
+        window.getScreenWidth = () => {
+            return window.innerWidth;
+        };
+    </script> *@
+    <script>
+        window.getScreenWidth = () => {
+            return window.innerWidth;
+        };
+
+        window.registerResizeHandler = (dotNetObjRef) => {
+            window.addEventListener('resize', () => {
+                dotNetObjRef.invokeMethodAsync('UpdateScreenWidth');
+            });
+        };
+    </script>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ module.exports = {
     venomBotRoute: require('./VenomBotRoute'),
     adminRoute: require('./AdminRoute'),
     tokenRoute: require('./tokenRoute'),
-    recordRoute: require('./recordRoute')
-
+    recordRoute: require('./recordRoute'),
+    roleRoute: require('./roleRoute'),
+    permissionRoute: require('./permissionRoute')
 }

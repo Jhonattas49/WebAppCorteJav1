@@ -18,19 +18,43 @@ exports.get = async () =>{
     return result;
 };
 
-exports.create = async (data) =>{
-    var role = new Role(data);    
+exports.create = async (data) => {
+    // Cria uma nova instância de Role com os dados fornecidos
+    const role = new Role(data);
+    
+    // Salva o novo Role no banco de dados e retorna o resultado
     return await role.save();
 };
 
-exports.update = (id, data) =>{
-    return Role
-        .findByIdAndUpdate(id,{
-        $set: {
+exports.update = (id, data) => {
+    console.log('Destro do repository');
+    return Role.findByIdAndUpdate(
+        id,
+        {
+            $set: {
                 name: data.name,
-                email: data.email,
-                mobilePhone: data.mobilePhone,
-                roles: data.roles,
-        } 
-        },{new: true});
+                permissions: data.permissions,
+                isActive: data.isActive,
+                color: data.color
+            }
+        },
+        { new: true }
+    );
+};
+
+exports.delete = async (roleId) => {
+    try {
+        console.log('Repositori: '+roleId)
+
+        const deletedRole = await Role.findByIdAndDelete(roleId);
+
+        console.log(deletedRole)
+        if (!deletedRole) {
+            throw new Error('Role not found');
+        }
+
+        return deletedRole;
+    } catch (err) {
+        throw new Error(`Error deleting role: ${err.message}`);
+    }
 };

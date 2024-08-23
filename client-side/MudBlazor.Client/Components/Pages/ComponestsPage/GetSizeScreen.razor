@@ -1,0 +1,60 @@
+﻿@inject IJSRuntime JS
+
+    
+@ChildContent
+
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var width = await JS.InvokeAsync<int>("getScreenWidth");
+    //     await OnScreenWidthChanged.InvokeAsync(width);
+    // }
+
+    // public void Dispose()
+    // {
+    //     StateHasChanged();
+    // }
+}
+@inject IJSRuntime JS
+
+
+    @ChildContent
+
+
+@code {
+    [Parameter] public EventCallback<int> OnScreenWidthChanged { get; set; } = default!;
+    private DotNetObjectReference<GetSizeScreen>? objRef;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        objRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("registerResizeHandler", objRef);
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     objRef = DotNetObjectReference.Create(this);
+    //     await JS.InvokeVoidAsync("registerResizeHandler", objRef);
+    //     await base.OnInitializedAsync();
+    // }
+
+    [JSInvokable]
+    public async Task UpdateScreenWidth()
+    {
+        var width = await JS.InvokeAsync<int>("getScreenWidth");
+        await OnScreenWidthChanged.InvokeAsync(width);
+    }
+
+    public void Dispose()
+    {
+        if (objRef != null)
+        {
+            objRef.Dispose();
+        }
+    }
+}
+
+

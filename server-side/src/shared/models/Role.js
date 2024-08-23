@@ -16,7 +16,7 @@ const Schema = mongoose.Schema;
 const { Permission } = require('../public/Permission');
 
 const roleSchema = new Schema({
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true , unique: true },
     permissions: [{ type: String, String: Object.values(Permission) }], // Array de strings com enum para validação
     createDate: { type: Date, required: true, default: Date.now },
     isActive: { type: Boolean, required: true, default: true },

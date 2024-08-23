@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="Services\Interfaces\" />
+    <Folder Include="Services\Mapping\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 </Project>

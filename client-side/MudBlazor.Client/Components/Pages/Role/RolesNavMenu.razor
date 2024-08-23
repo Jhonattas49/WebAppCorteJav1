@@ -1,0 +1,42 @@
+﻿<MudNavMenu>
+    @foreach (var item in DataRole!.roles)
+    {
+        <MudNavLink Icon="@(item.Checked ? Icons.Material.Filled.Check:string.Empty)" OnClick="@( async ()=>{ItemSelected= item; await Changed();})" Match="NavLinkMatch.All" IconColor="Color.Inherit">
+            @item.Name
+        </MudNavLink>
+        <MudDivider />
+    }
+</MudNavMenu>
+
+@code{
+    [Parameter] public SourceRole? DataRole { get; set; } = new();
+    [Parameter] public EventCallback<SourceRole?> DataRoleChanged { get; set; }  // Adicionando para suporte ao binding bidirecional
+    [Parameter] public string _icons { get; set; } = string.Empty;
+    [Parameter] public ApplicationRole? ItemSelected { get; set; }
+    [Parameter] public EventCallback<ApplicationRole> ItemSelectedChanged { get; set; }
+    [Parameter] public EventCallback FuncCheckRoles { get; set; }
+    [Parameter] public EventCallback<bool> OpenDrawer { get; set; }
+
+
+    // Exemplo de método que poderia atualizar o DataRole e acionar o DataRoleChanged
+    private void UpdateRoles(SourceRole? newDataRole)
+    {
+        DataRole = newDataRole;
+
+        DataRoleChanged.InvokeAsync(DataRole);
+    }
+
+    private async Task Changed()
+    {
+        DataRole!.roles.ForEach(item => { if (item.Checked) item.Checked = false; });
+
+        if (ItemSelected != null)
+        {
+            DataRole!.roles.First(p => p._id == ItemSelected._id).Checked = true;
+        }
+
+        await OpenDrawer.InvokeAsync(false);
+        await ItemSelectedChanged.InvokeAsync(ItemSelected);
+        await FuncCheckRoles.InvokeAsync();
+    }
+}
