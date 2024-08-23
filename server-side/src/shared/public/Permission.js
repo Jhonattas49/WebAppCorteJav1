@@ -11,23 +11,34 @@
  */
 'use strict';
 exports.Permission = {
-    record_update: "Atualizar registro",
-    record_cancel: "Cancelar registro",
-    record_delete: "Deletar registro",
-    customer_views: "Visualizar Cliente",
-    customer_create: "Criar Cliente",
-    customer_update: "Atualizar Cliente",
-    customer_cancel: "Cancelar Cliente",
-    admin_views: "Visualizar administrador",
-    admin_create: "Criar administrador",
-    admin_update: "Atualizar administrador",
-    admin_cancel: "Cancelar administrador",
-    bot_views: "Visualizar bot",
+    record_update: "Registro Alterar",
+    record_cancel: "Registro Cancelar",
+
+    customer_views: "Cliente Visualizar todos",
+    customer_show: "Cliente Apresentar somente",
+    customer_create: "Cliente Criar",
+    customer_update: "Cliente Alterar",
+    customer_cancel: "Cliente Cancelar",    
+
+    admin_views: "Administrador Visualizar todos",
+    admin_show: "Administrador Apresentar somente",
+    admin_create: "Administrador Criar",
+    admin_update: "Administrador Alterar",
+    admin_cancel: "Administrador Cancelar",
+
+    roles_views: "Role Visualizar todos",
+    roles_show: "Role Apresentar somente",
+    roles_create: "Role Criar",
+    roles_update: "Role Alterar",
+    roles_cancel: "Role Cancel",
+    roles_delete: "Role Delete",
+    
+    bot_views: "Bot Visualizar todos",
+    bot_show: "Bot Apresentar somente",
+    bot_create: "Bot Criar",
+    bot_update: "Bot Alterar",
+    roles_delete: "Bot Delete",
     bot_start: "Iniciar bot",
-    bot_create: "Criar bot",
-    bot_cancel: "Cancelar bot",
-    bot_Update: "Atualizar bot",
-    hairdresser_views: "Visualizar cabeleireiro",
 };
 
 

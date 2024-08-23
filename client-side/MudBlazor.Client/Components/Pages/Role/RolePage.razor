@@ -224,7 +224,7 @@
         if (SelectedRoles == null)
         {
             SelectedRoles = new ApplicationRole();
-            SelectedRoles.IsActive = true;
+            SelectedRoles.IsActive = true;          
             txt = "Novo papel";
         }
         var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = false, };
@@ -243,6 +243,8 @@
                 ShowMessage(mensagem: "Você precisa definir um nome!", type: Severity.Warning);
                 SelectedRoles = null!;
             }
+            if (string.IsNullOrEmpty(SelectedRoles._id)) SelectedRoles.Name = UpdateName;
+            
             StateHasChanged();
         }
     }
