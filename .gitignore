@@ -6,3 +6,4 @@ client-side/.vs
 /client-side/MudBlazor.Client/Components/CustomInitializationAttribute.cs
 /client-side/MudBlazor.Client/Services/Interfaces/IAuthorizeData.cs
 /client-side/MudBlazor.Client/Shared/Attributes/CustomAuthorizeAttribute.cs
+/client-side/MudBlazor.Client/appsettings.json

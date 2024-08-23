@@ -157,5 +157,4 @@ yarn.lock
 .vscode/
 .idea/
 
-# Retirando appsettings.json
-appsettings.json
+
