@@ -11,36 +11,31 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Recorded = mongoose.model('Recorded'); 
+const Record = mongoose.model('Record'); 
 
 exports.get = async () =>{
-    const result= await Recorded.find({});
+    const result= await Record.find({});
     return result;
 };
 
 exports.getByEmail = async (email) =>{
-    const result= await Recorded.findOne({ email: email });
+    const result= await Record.findOne({ email: email });
     return result;
 };
 
-exports.create = async (data) =>{
-    var recorded = new Recorded (data);    
-    return await recorded.save();
+
+exports.create = async (data) => {
+    const record = new Record(data);
+    return await record.save();
 };
 
 //Precisa ajustar
 exports.update = (id, data) =>{
-    return Recorded
+    return Record
         .findByIdAndUpdate(id,{
         $set: {
                 name: data.name,
                 email: data.email,
         } 
         },{new: true});
-};
-
-exports.authenticate = async (data) => {
-    const customer = await Customer.findOne({email : data.email});
-    const result = comparePassword.comparePassword(data.password,customer.password)?customer:false;
-    return result;
 };

@@ -1,10 +1,11 @@
 ﻿@page "/register"
+@using MudBlazor.Client.Components.Pages.Contact
 @using MudBlazor.Client.Shared.Services
 @layout Layout.MainLayoutIndex
 
 
 
-    <MudForm Model="@model" @ref="@Form"  ValidationDelay="0">
+<MudForm Model="@model" @ref="@Form" ValidationDelay="0">
     <MudGrid Class="d-flex justify-center flex-grow-1 gap-4">
         <MudItem xs="12" sm="7">
             <MudCard>
@@ -18,7 +19,7 @@
                                 </MudAvatar>
                                 <MudText Class="mt-2" Typo="Typo.subtitle1">Fazer login utilizando uma conta do google</MudText>
                             </MudStack>
-                        </MudButton>                        
+                        </MudButton>
                     </CardHeaderContent>
                     <CardHeaderActions>
                         <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.ChildCare" Size="Size.Large" />
@@ -58,15 +59,16 @@
             </MudCard>
         </MudItem>
     </MudGrid>
- </MudForm>
+</MudForm>
 
 @code {
+    [Inject] public RecordService _recordService { get; set; } = default!;
     private ApplicationUser model = new();
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
     InputType PasswordInput = InputType.Password;
     bool isShow;
-    private Contacts contactsComponent= default!;
-    MudForm Form= default!;
+    private Contacts contactsComponent = default!;
+    MudForm Form = default!;
 
     private async Task OnValidSubmit(/* EditContext context */)
     {
@@ -75,7 +77,29 @@
 
         if (contact && Form.IsValid)
         {
-            
+            var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+            var parameters = new DialogParameters<DialogMessage>
+               {
+                   {x => x.DialogContent , $"Para concluir seu cadastro, confirme que deseja se registrar com as informações fornecidas."}
+               };
+            var dialog = await _dialogService.ShowAsync<DialogMessage>("Aviso", parameters, options);
+            var result = await dialog.Result;
+            if (!result!.Canceled)
+            {
+                var data = await _recordService.PostRecordAsync(model);
+                if (data.Success)
+                {
+                    if (_userSessionState == null)
+                    {
+                        ShowMessage(data.Message!, type: Severity.Success);
+                        //Redirecionar para tela de gerenciamento de usuário
+                        return;
+                    }
+                    await LoginAsync((InputLoginRequest)data.Data!);
+                    return;
+                }
+                ShowMessage(data.Message!, type: Severity.Error);
+            }
         }
         StateHasChanged();
     }

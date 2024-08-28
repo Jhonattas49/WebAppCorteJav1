@@ -17,4 +17,11 @@ namespace MudBlazor.Client.Shared.Enums
         [CountryFlagIcon(Name = "Argentina", IconBase64 = Img64Page.ImagFlags.Argentina16x)]
         Argentina = 3,
     }
+    public enum TypeNumber
+    {
+        [CountryFlagIcon(Name = "WhatsApp", IconBase64 = Img64Page.WhatsApp24)]
+        WhatsApp24 = 0,
+        [CountryFlagIcon(Name = "WhatsApp", IconBase64 = Img64Page.WhatsAppDark24)]
+        WhatsApp24Dark = 1,       
+    }
 }

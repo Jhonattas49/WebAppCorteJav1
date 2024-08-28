@@ -9,12 +9,13 @@
 'use strict';
 
 module.exports = {
-    indexRoute: require('./indexRoute'),
+    loginRoute: require('./loginRoute'),
     customerRoute: require('./CustumerRoute'),
     venomBotRoute: require('./VenomBotRoute'),
     adminRoute: require('./AdminRoute'),
     tokenRoute: require('./tokenRoute'),
     recordRoute: require('./recordRoute'),
     roleRoute: require('./roleRoute'),
-    permissionRoute: require('./permissionRoute')
+    permissionRoute: require('./permissionRoute'),
+    userRoute: require('./userRoute'),
 }

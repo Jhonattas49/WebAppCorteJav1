@@ -29,5 +29,7 @@ namespace MudBlazor.Client.Shared.Models
         [Display(Name = "Contatos")]
         [NotEmptyList(ErrorMessage = "Pelo menos um contato é obrigatório.")]
         public List<Contact>? Contacts { get; set; } = new List<Contact>()!;
+
+        public List<string> Roles { get; set; } = default!;
     }
 }

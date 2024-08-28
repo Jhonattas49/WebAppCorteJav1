@@ -27,6 +27,7 @@ exports.get = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+    console.log('Controller admin')
     try {
         const result = await repository.authenticate({
             email: req.body.email,
@@ -40,7 +41,7 @@ exports.login = async (req, res, next) => {
         
         req.body.user = result;
         next(); // Encaminha a requisição para a próxima função de middleware
-        // const token = await tokenServices.generateToken(recorded);
+        // const token = await tokenServices.generateToken(record);
 
         // res.status(200).send({
         //     Message: recorded.message,

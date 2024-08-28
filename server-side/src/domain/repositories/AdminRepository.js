@@ -16,7 +16,7 @@ const Customer = mongoose.model('Customer');
 
 const User = mongoose.model('User');
 const comparePassword = require('../services/AuthServices');
-const Recorded = mongoose.model('Recorded');
+const Record = mongoose.model('Record');
 
 
 exports.get = async () => {
@@ -32,12 +32,12 @@ exports.create = (data) => {
 exports.authenticate = async (data) => {
     try {
         // Procurar no modelo Recorded pelo email
-        const recorded = await Recorded.findOne({ email: data.email });
-        if (!recorded) {
+        const record = await Record.findOne({ email: data.email });
+        if (!record) {
             return { success: false, message: 'Login ou senha incorreto', data: null };
         }
         // Procurar usuário associado ao recorded
-        const user = await User.findOne({ recorded: recorded.id });
+        const user = await User.findOne({ record: record.id });
 
         if (!user || !user.isActive) {
             return { success: false, message: 'Entre em contato com adiminstrador do sistema',data: null };
@@ -58,7 +58,7 @@ exports.authenticate = async (data) => {
         }
 
         // Retornar usuário autenticado
-        return { success: true, message: 'Login realizado com sucesso.', data: recorded };
+        return { success: true, message: 'Login realizado com sucesso.', data: record };
     } catch (error) {
         console.error('Erro na autenticação:', error);
         return { success: false, message: 'Erro ao autenticar usuário!' };

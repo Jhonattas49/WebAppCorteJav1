@@ -24,10 +24,6 @@ router.post('/',
     validator.customerValidationRules(), 
     controller.post);
 
-router.post('/login', 
-    validator.customerValidationRules(), 
-    controller.login);
-
 router.put('/:id',
     autheService.authorize,
     validator.customerValidationRules(),

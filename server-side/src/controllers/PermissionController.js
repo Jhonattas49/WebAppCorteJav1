@@ -11,9 +11,6 @@
  * @since [28/06/2024]
  */
 'use strict';
-
-//const repository = require('../domain/repositories/AdminRepository');
-//const { validationResult } = require('express-validator');
 const  permissionsEnum= require('../shared/public/Permission').Permission;
 
 exports.get = async (req, res, next) => {
@@ -38,38 +35,4 @@ exports.get = async (req, res, next) => {
         });
     }
 }
-
-// exports.login = async (req, res, next) => {
-//     try {
-//         const customer = await repository.authenticate({
-//             email: req.body.email,
-//             password: req.body.password
-//         });
-
-            
-//         if (!customer) {
-//             res.status(404).send({
-//                 message: "Usuário ou senha inválido!"
-//             });
-//             return;
-//         }
-//         return;
-//         const token = await autheService.generateToken({
-//             id: customer._id,
-//             identity: customer.identity,
-//             email: customer.email,
-//             name: customer.name,
-//             roles: customer.roles,
-//             mobilePhone: customer.mobilePhone
-//         });
-
-//         res.status(200).send(token);
-//     } catch (e) {
-//         res.status(500).send({
-//             result: e,
-//             message: 'Falha ao processar sua requisição!'
-//         });
-//     }
-// };
-
 
