@@ -14,16 +14,11 @@
 
 const express = require('express');
 const router = express.Router();
-const controller = require('../../controllers/RecordController');
-const controller2 = require('../../controllers/UserController');
+const controller = require('../../controllers/UserController');
 //const autheService = require('../services/AuthServices').authorize;
 
 //router.get('/',  middlewaresIndex.CreateSupUser, controller.get);
 router.get('/', controller.get);
-router.post('/', controller.post , controller2.post);
-
-
-
-
+router.post('/', controller.post);
 
 module.exports = router;

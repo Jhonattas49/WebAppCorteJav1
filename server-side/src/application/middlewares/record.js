@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const { create, getByEmail } = require('../../domain/repositories/RecordedRepository');
-const Recorded = mongoose.model('Recorded');
+const { create, getByEmail } = require('../../domain/repositories/RecordRepository');
+const Record = mongoose.model('Record');
 const createRole = require('../../domain/repositories/RoleRepository').create;
 const Role = mongoose.model('Role');
 const createUser = require('../../domain/repositories/UserRepository').create;
@@ -49,7 +49,7 @@ const CreateSupUser = async (req, res, next) => {
 };
 
 async function recordCreate(roles) {
-    const record = new Recorded({
+    const record = new Record({
         name: 'Root',
         email: 'root@root',
         contacts: [{
@@ -82,7 +82,7 @@ async function UserCreate(record) {
     const hashedPassword = await bcrypt.hash('!!Son2024' + SALT_KEY, 10);
 
     const userData = new User({
-        recorded: record._id,
+        record: record._id,
         password: [hashedPassword],
         isActive: true
     });

@@ -11,7 +11,7 @@
 
 //Arquivo para cerregar as modelos
 module.exports = {
-    Recorded: require('./Recorded'),
+    Recorded: require('./Record'),
     User: require('./User'),
     Role: require('./Role'),
     Customer: require('./Customer')

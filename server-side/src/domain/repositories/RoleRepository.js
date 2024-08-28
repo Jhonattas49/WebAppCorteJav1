@@ -27,7 +27,6 @@ exports.create = async (data) => {
 };
 
 exports.update = (id, data) => {
-    console.log('Destro do repository');
     return Role.findByIdAndUpdate(
         id,
         {
@@ -44,11 +43,8 @@ exports.update = (id, data) => {
 
 exports.delete = async (roleId) => {
     try {
-        console.log('Repositori: '+roleId)
-
         const deletedRole = await Role.findByIdAndDelete(roleId);
 
-        console.log(deletedRole)
         if (!deletedRole) {
             throw new Error('Role not found');
         }

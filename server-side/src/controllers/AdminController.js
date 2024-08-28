@@ -13,9 +13,6 @@
 'use strict';
 
 const repository = require('../domain/repositories/AdminRepository');
-//const { validationResult } = require('express-validator');
-
-
 
 exports.get = async (req, res, next) => {
     try {
@@ -28,8 +25,6 @@ exports.get = async (req, res, next) => {
         });
     }
 }
-
-// exports.login = async (req, res, next) => {
 //     try {
 //         const customer = await repository.authenticate({
 //             email: req.body.email,

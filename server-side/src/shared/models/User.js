@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    recorded: { type: mongoose.Schema.Types.ObjectId, ref: 'Recorded', required: true },
+    record: { type: mongoose.Schema.Types.ObjectId, ref: 'Record', required: true },
     password: [{ type: String, required: true }],
     isActive: { type: Boolean, required: true, default: true },
 });

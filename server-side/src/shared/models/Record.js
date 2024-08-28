@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const contacts = require('../enums/ContactEnums').ContactEnum;
 
-const RecordedSchema = new Schema({
+const RecordSchema = new Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, index: true, unique: true },
     contacts: [{
@@ -32,4 +32,4 @@ const RecordedSchema = new Schema({
 });
 
 
-module.exports = mongoose.model('Recorded', RecordedSchema);
+module.exports = mongoose.model('Record', RecordSchema);

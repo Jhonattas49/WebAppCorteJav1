@@ -11,7 +11,6 @@
  * @since [28/06/2024]
  */
 'use strict';
-const  rolesEnum= require('../shared/public/Permission').Roles;
 const repository = require('../domain/repositories/RoleRepository');
 
 exports.get = async (req, res, next) => {

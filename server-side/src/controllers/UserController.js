@@ -12,13 +12,12 @@
  */
 'use strict';
 
-const repository = require('../domain/repositories/RecordRepository');
+const repository = require('../domain/repositories/UserRepository');
 
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const SALT_KEY = process.env.SALT_KEY;
-const crypto = require('../shared/public/GenerateNumber');
-const autheService = require('../domain/services/AuthServices');
+
 
 exports.get = async (req, res, next) => {
     try {
@@ -35,24 +34,24 @@ exports.get = async (req, res, next) => {
 
 exports.post = async (req, res, next) => {
     try{
-        const record = {
-            name: req.body.Name,
-            email: req.body.Email,
-            contacts: req.body.Contacts.map(contact => ({
-                number: contact.number,
-                isWhatsApp: contact.isWhatsApp,
-                isActive: contact.isActive
-            })),
-            role: req.body.Roles
+        const hashedPassword = await bcrypt.hash(req.RecordPassword + SALT_KEY, 10);
+      
+        const user = {
+            record: req.RecordId,
+            password: [hashedPassword],      
         };
 
-        //Chama o método create do repositório para criar um novo role
-        const result = await repository.create(record);   
+        // Chama o método create do repositório para criar um novo role
+        const result = await repository.create(user);
 
-        req.RecordId = result._id;
-        req.RecordEmail = result.email; 
-        req.RecordPassword =  req.body.Password   
-        next();
+        return res.status(201).json({
+            Message: "Registro realizado com sucesso!",
+            Success: true,
+            Data: {
+                Email: req.RecordEmail,
+                Password : req.RecordPassword,
+            }
+        });
     }catch(e){
         res.status(500).send({
             message: 'Falha ao precessar sua requisição'
