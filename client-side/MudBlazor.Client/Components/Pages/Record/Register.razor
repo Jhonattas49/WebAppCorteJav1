@@ -1,0 +1,147 @@
+﻿@page "/register"
+@using MudBlazor.Client.Components.Pages.Contact
+@using MudBlazor.Client.Shared.Services
+@layout Layout.MainLayoutIndex
+
+
+
+<MudForm Model="@model" @ref="@Form" ValidationDelay="0">
+    <MudGrid Class="d-flex justify-center flex-grow-1 gap-4">
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">
+                            @if (!IsDisabled){<p>Cadastro</p>}else{<p>Alterar</p>}
+                        </MudText>
+                        <MudButton>
+                            <MudStack Row="true">
+                                @if (!IsDisabled)
+                                {
+                                    <MudAvatar>
+                                        <MudImage Src="@Img64Page.GoogleIcon46x" />
+                                    </MudAvatar>
+                                    <MudText Class="mt-2" Typo="Typo.subtitle1">Fazer login utilizando uma conta do google</MudText>
+                                }
+                            </MudStack>
+                        </MudButton>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.ChildCare" Size="Size.Large" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem lg="6" md="6" xs="12">
+                            <MudTextField InputType="InputType.Text" Label="Nome" HelperText="Máx. 8 caracteres" @bind-Value="model.Name" For="@(() => model.Name)" />
+                        </MudItem>
+                        <MudItem lg="6" md="6" xs="12">
+                            <MudTextField InputType="InputType.Email" Label="Email" HelperText="Informe seu Email" @bind-Value="model.Email" For="@(() => model.Email)" />
+                        </MudItem>
+                        <MudItem lg="12" md="12" xs="12">
+                            <Contacts Label="Contato" Variant="Variant.Outlined" @bind-Value="model.Contacts" @ref="contactsComponent" />
+                        </MudItem>
+                        <MudItem lg="6" md="6" xs="12">
+                            <MudTextField Label="Senha" HelperText="Escolha uma senha forte" @bind-Value="@model.Password" For="@(() => model.Password)"
+                                          Immediate="true"
+                                          InputType="@PasswordInput"
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@PasswordInputIcon"
+                                          OnAdornmentClick="ButtonTestclick"
+                                          AdornmentAriaLabel="Exibir a senha" />
+                        </MudItem>
+                        <MudItem lg="6" md="6" xs="12">
+                            <MudTextField Label="Confirmar" HelperText="Repita a senha" @bind-Value="model.Password2" For="@(() => model.Password2)" InputType="InputType.Password" />
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+                <MudCardActions Class="d-flex justify-end flex-grow-1 gap-4">
+                    <div class="col-5">
+                        @if (!IsDisabled)
+                        {
+                            <MudButton Href="login" Variant="Variant.Text" Disabled=IsDisabled Color="Color.Info" Class="ml-auto">Login</MudButton>
+                        }
+
+                        <MudButton OnClick="OnValidSubmit" Variant="Variant.Filled" Color="BTNColorOnValidSubmit" Class="ml-auto">Register</MudButton>
+                    </div>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+@code {
+    [Inject] public RecordService _recordService { get; set; } = default!;
+    private ApplicationUser model = new();
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    InputType PasswordInput = InputType.Password;
+    bool isShow;
+    private Contacts contactsComponent = default!;
+    MudForm Form = default!;
+    private Color BTNColorOnValidSubmit = Color.Primary;
+    private bool IsDisabled = false;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var x = _userSessionState.UserSession;
+        if (x == null) return;
+        BTNColorOnValidSubmit = Color.Warning;
+        IsDisabled = true;
+        model = await _recordService.GetRegisterByEmailAsync(x!.Email);
+
+
+    }
+
+    private async Task OnValidSubmit(/* EditContext context */)
+    {
+        await Form.Validate();
+        var contact = await contactsComponent.Validate();
+
+        if (contact && Form.IsValid)
+        {
+            var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+            var parameters = new DialogParameters<DialogMessage>
+               {
+                   {x => x.DialogContent , $"Para concluir seu cadastro, confirme que deseja se registrar com as informações fornecidas."}
+               };
+            var dialog = await _dialogService.ShowAsync<DialogMessage>("Aviso", parameters, options);
+            var result = await dialog.Result;
+            if (!result!.Canceled)
+            {
+                var data = await _recordService.PostRecordAsync(model);
+                if (data.Success)
+                {
+                    if (_userSessionState == null)
+                    {
+                        ShowMessage(data.Message!, type: Severity.Success);
+                        //Redirecionar para tela de gerenciamento de usuário
+                        return;
+                    }
+                    await LoginAsync((InputLoginRequest)data.Data!);
+                    return;
+                }
+                ShowMessage(data.Message!, type: Severity.Error);
+            }
+        }
+        StateHasChanged();
+    }
+
+    private void ButtonTestclick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

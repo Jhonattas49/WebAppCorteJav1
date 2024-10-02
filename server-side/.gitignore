@@ -1,0 +1,11 @@
+
+#retirando repositório
+node_modules/
+# Ignorar arquivo .env
+.env
+# Ignorar o arquivo de token
+tokens/
+
+# Retirando api test
+WebAppCorteJa/
+

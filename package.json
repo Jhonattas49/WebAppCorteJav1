@@ -1,0 +1,22 @@
+{
+  "name": "webappcortejav1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server-side/bin/server.js",
+    "client": "dotnet run --project client-side/ClientViewsMudBlazor/ClientViewsMudBlazor/ClientViewsMudBlazor.csproj",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "listfile": "node listFiles.js"
+  },
+  "keywords": [],
+  "author": "Gerson",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^6.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "nodemon": "^3.1.4"
+  }
+}

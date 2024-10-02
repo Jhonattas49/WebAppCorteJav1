@@ -1,0 +1,68 @@
+﻿@implements IDisposable
+
+<MudButton Variant="Variant.Text" Color="Color.Default" Href="/">Home</MudButton>
+<MudButton Variant="Variant.Text" Color="Color.Default" Href="sobre">SOBRE</MudButton>
+<MudMenu Label="Produtos">
+    @*  Criar menu para os produtos *@
+</MudMenu>
+<MudSpacer />
+@if (!_statusSession)
+{
+    <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+}
+else
+{
+    if (_userSessionState != null && _userSessionState?.UserSession != null)
+    {
+        <MudMenu Label="@_userSessionState.UserSession!.Name" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.Person" IconColor="Color.Default">
+            <MudMenuItem Href="/admin">Minha conta</MudMenuItem>
+            <MudMenuItem Href="/register">Editar</MudMenuItem>
+            <MudMenuItem>Perfil</MudMenuItem>
+            <MudMenuItem>Meus serviços</MudMenuItem>
+            <MudMenuItem OnClick="_logout">Sair</MudMenuItem>
+            <MudMenuItem OnClick="DeleteUserAsync">Cancelar Cliente</MudMenuItem>
+            @if (_userSessionState.StatusSession == false)
+            {
+                <MudDivider />
+                <MudText Style="font-size:9px" Typo="Typo.caption" Color="Color.Error">Sessão expirada,<MudLink Style="font-size:9px" Href="/login">Clique aqui</MudLink> para fazer login novamente.</MudText>
+            }
+        </MudMenu>
+    }
+    else
+    {
+        <MudButton Href="/login" StartIcon="@Icons.Material.Filled.Person" Color="Color.Default" Variant="Variant.Text">Login</MudButton>
+    }
+}
+@ChildContent
+@code {
+    [Inject] public RecordService _recordService { get; set; } = default!;
+    private bool _statusSession { get; set; } = false;
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+
+    public void Dispose()
+    {
+        StateHasChanged();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        _statusSession = true;
+        StateHasChanged();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task _logout()
+    {
+        await Logout();
+        _navigation.NavigateTo("/");
+    }
+    private async Task DeleteUserAsync()
+    {
+
+        var user = _userSessionState.UserSession;
+        if (user == null) return;
+       
+        await _recordService.DeleteUserAsync(user.Email);
+       
+    }
+}

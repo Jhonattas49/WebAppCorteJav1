@@ -1,0 +1,384 @@
+﻿@page "/roles"
+@page "/role"
+@using System.Diagnostics.CodeAnalysis
+@using MudBlazor.Client.Domain
+@using MudBlazor.Client.Shared.Services
+<PageTitle>Papeis</PageTitle>
+
+
+@code {
+    [Inject] public RoleService _roleService { get; set; } = default!;
+    private SourceRole? DataRole { get; set; } = new SourceRole();
+    private List<Permission>? DataPermission { get; set; } = new List<Permission>();
+    private List<Permission>? DataPermissionSersh { get; set; } = new List<Permission>();
+    private ApplicationRole SelectedRoles = null!;
+    private bool _isRolesNavMenuVisible { get; set; }
+    private List<(bool _checked, string _value)> PermissionValues = new List<(bool, string)>();
+    private List<string> ItemsAlterados = null!;
+    private bool _hasChanged = false;
+    private string UpdateName = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await _roleService.IndexAsync();
+        if (data.Success)
+            DataRole = data.Data.Roles;
+
+        if (data.Success)
+        {
+            DataPermission = data.Data.Permission.permissions
+            .Select(permission => new Permission
+                {
+                    Name = permission.Name,
+                    Description = permission.Description,
+                    IsSelected = permission.IsSelected,
+                    Color = permission.Color
+                }).ToList();
+            // Cria uma cópia independente dos objetos da lista
+            DataPermissionSersh = DataPermission;
+            MudButtonFilterChip(DataPermission); // Cria o filtro para permissão
+        }
+        await base.OnInitializedAsync();
+    }
+    private async Task<bool> OpenDialogMessageAsync(string text)
+    {
+        var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+        var parameters = new DialogParameters<DialogMessage>
+        {
+            {x => x.DialogContent , text}
+        };
+        var dialog = await _dialogService.ShowAsync<DialogMessage>("Alerta", parameters, options);
+        var result = await dialog.Result;
+        if (result!.Canceled)
+        {
+            return false;
+        }
+        return true;
+    }
+    private void MudButtonFilterChip(List<Permission> _permissions)
+    {
+        _permissions.Select(p => p.Name.Split('_')[0]).Distinct().ToList().ForEach(item =>
+        {
+            PermissionValues.Add((false, item));
+        });
+    }
+    private void Search((bool _checked, string _value) param)
+    {
+        // Define todos os itens da lista como `false`
+        for (int i = 0; i < PermissionValues.Count; i++)
+        {
+            PermissionValues[i] = (false, PermissionValues[i]._value);
+        }
+
+        // Encontra o índice do item correspondente na lista
+        int index = PermissionValues.FindIndex(p => p._value == param._value);
+
+        if (index != -1)
+        {
+            // Cria uma nova tupla com o valor de _checked modificado
+            var newTuple = (!param._checked, param._value);
+
+            // Substitui a tupla antiga pela nova na lista
+            PermissionValues[index] = newTuple;
+        }
+
+        if (param._checked)
+        {
+            DataPermissionSersh = DataPermission!.ToList();
+            return;
+        }
+
+        // Filtra a lista DataPermission com base no valor _value
+        DataPermissionSersh = DataPermission!
+            .Where(x => x.Name.Contains(param._value ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+            .ToList();
+
+        // Atualiza o estado da interface
+        StateHasChanged();
+    }
+    private void ClearAll()
+    {
+        SelectedRoles = null!;
+        UpdateName = null!;
+        _hasChanged = false;
+
+        foreach (var item in DataPermissionSersh!)
+        {
+            item.IsSelected = false;
+            item.Color = Color.Default;
+        }
+        foreach (var item in DataRole!.roles)
+        {
+            item.Checked = false;
+        }
+        StateHasChanged();
+    }
+    private void FuncCheckRoles()
+    {
+        DataPermissionSersh!.ForEach(item => item.IsSelected = false);
+
+        foreach (var item in DataPermissionSersh!)
+        {
+            if (DataRole?.roles.FirstOrDefault(p => p._id == SelectedRoles._id)?.Permissions?.Contains(item.Name) ?? false)
+            {
+                item.IsSelected = true;
+            }
+        }
+        StateHasChanged();
+    }
+    private bool ValueChanged(Permission param)
+    {
+        param.IsSelected = !param.IsSelected;
+        if (ItemsAlterados == null)
+        {
+            ItemsAlterados = new List<string>();
+            ItemsAlterados!.Add(param.Name);
+        }
+        else if (ItemsAlterados != null && !ItemsAlterados.Select(p => p).Contains(param.Name)) ItemsAlterados!.Add(param.Name);
+        else ItemsAlterados!.Remove(param.Name);
+
+        if (ItemsAlterados == null)
+        {
+            _hasChanged = false;
+        }
+        else if (ItemsAlterados!.Count == 0)
+        {
+            _hasChanged = false;
+        }
+        else
+        {
+            _hasChanged = true;
+        }
+
+        return param.IsSelected;
+    }
+    private async void Submit()
+    {
+        if (!string.IsNullOrEmpty(UpdateName))
+        {
+            SelectedRoles.Name = UpdateName;
+        }
+        if (!string.IsNullOrEmpty(SelectedRoles._id))
+        {
+            var data = DataPermissionSersh!.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+            SelectedRoles.Permissions = data;
+            var text = new string[] { "as permissões", "a permissão" };
+            var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+            var parameters = new DialogParameters<DialogMessage>
+               {
+                   {x => x.DialogContent , $"Tem certeza que deseja alterar {(data.Count > 1? text[0]: text[1])} de {SelectedRoles!.Name}?"}
+               };
+            var dialog = await _dialogService.ShowAsync<DialogMessage>("Aviso", parameters, options);
+            var result = await dialog.Result;
+            if (!result!.Canceled)
+            {
+                var dataResult = await _roleService.UpdateRolesPermissionAsync(SelectedRoles);
+
+                if (dataResult.Success)
+                {
+                    ShowMessage(dataResult.Message!, type: Severity.Success);
+                    DataRole!.roles.RemoveAll(p => p._id == dataResult.Data!._id);
+                    DataRole!.roles.Add(dataResult.Data!);
+                    StateHasChanged();
+                    return;
+                }
+                ShowMessage(dataResult.Message!, type: Severity.Error);
+            }
+        }
+        else
+        {
+            var data = DataPermissionSersh!.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+            if (data == null) return;
+            SelectedRoles.Permissions = data;
+            var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+            var parameters = new DialogParameters<DialogMessage>
+               {
+                   {x => x.DialogContent , $"Você está prestes a criar um novo papel chamado '{SelectedRoles.Name}'. Tem certeza de que deseja prosseguir?"}
+               };
+            var dialog = await _dialogService.ShowAsync<DialogMessage>("Aviso", parameters, options);
+            var result = await dialog.Result;
+            if (!result!.Canceled)
+            {
+                var dataResult = await _roleService.PostRolesPermissionAsync(SelectedRoles);
+
+                if (dataResult.Success)
+                {
+                    ShowMessage(dataResult.Message!, type: Severity.Success);
+                    DataRole!.roles.Add(dataResult.Data!);
+                    StateHasChanged();
+                    return;
+                }
+                ShowMessage(dataResult.Message!, type: Severity.Error);
+            }
+        }
+    }
+    private void ValueChangedCancel()
+    {
+        SelectedRoles.IsActive = !SelectedRoles.IsActive;
+        if (_hasChanged) return;
+        _hasChanged = !_hasChanged;
+    }
+    private async Task OpenDialog()
+    {
+        var txt = "Alterar papel";
+        if (SelectedRoles == null)
+        {
+            SelectedRoles = new ApplicationRole();
+            SelectedRoles.IsActive = true;          
+            txt = "Novo papel";
+        }
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = false, };
+        var parameters = new DialogParameters<DialogRoles>
+               {
+                   {x => x.Name , SelectedRoles.Name }
+               };
+        var dialog = await _dialogService.ShowAsync<DialogRoles>(txt, parameters, options);
+        var result = await dialog.Result;
+        if (!result!.Canceled)
+        {
+            UpdateName = (string)result.Data!;
+
+            if (string.IsNullOrEmpty(UpdateName))
+            {
+                ShowMessage(mensagem: "Você precisa definir um nome!", type: Severity.Warning);
+                SelectedRoles = null!;
+            }
+            if (string.IsNullOrEmpty(SelectedRoles._id)) SelectedRoles.Name = UpdateName;
+            
+            StateHasChanged();
+        }
+    }
+    private async Task SubmitDel()
+    {
+
+        var options = new DialogOptions { BackgroundClass = "my-custom-class" };
+        var parameters = new DialogParameters<DialogMessage>
+               {
+                   {x => x.DialogContent , $"Tem certeza que deseja deletar a role {SelectedRoles!.Name}?"}
+               };
+        var dialog = await _dialogService.ShowAsync<DialogMessage>("Alerta", parameters, options);
+        var result = await dialog.Result;
+        if (!result!.Canceled)
+        {
+            if (await OpenDialogMessageAsync("Você está prestes a excluir permanentemente esses dados. Após a exclusão, não será possível restaurá-los. Deseja continuar?"))
+            {
+                var dataResult = await _roleService.DeleteRoleAsync(SelectedRoles._id!);
+
+                if (dataResult.Success)
+                {
+                    ShowMessage(dataResult.Message!, type: Severity.Success);
+                    DataRole!.roles.RemoveAll(p => p._id == dataResult.Data!._id);
+                    StateHasChanged();
+                    ClearAll();
+                    return;
+                }
+                ShowMessage(dataResult.Message!, type: Severity.Error);
+            }            
+        }
+    }
+}
+<MudLayout>
+    <MudDrawer @bind-Open="@_isRolesNavMenuVisible" Elevation="1">
+        <RolesNavMenu FuncCheckRoles="@FuncCheckRoles" @bind-DataRole="@DataRole" @bind-ItemSelected="@SelectedRoles" OpenDrawer="@((item)=>{_isRolesNavMenuVisible = item;})"></RolesNavMenu>
+    </MudDrawer>
+    <MudGrid Class="mb-4">
+        <MudItem xs="6" sm="6" md="3" lg="3">
+            <h3>
+                @SelectedRoles?.Name
+                @if (SelectedRoles != null && !string.IsNullOrEmpty(SelectedRoles.Name))
+                {
+                    <MudIconButton Class="ml-4" OnClick="ClearAll" Icon="@Icons.Material.Filled.Close" Size="Size.Small" aria-label="close"></MudIconButton>
+                }
+            </h3>
+        </MudItem>
+        <MudItem Class="d-flex justify-end flex-grow-1 gap-4" sm="6" xs="6" md="9" lg="9">
+            <RouleGroupButton Model="@SelectedRoles"
+                              ActiveEdit="@_hasChanged"
+                              Submit="@Submit"
+                              OpenDialog="@OpenDialog" 
+                              SubmitDel="@SubmitDel" />
+        </MudItem>
+    </MudGrid>
+
+    <!--MudChip header primeiro nome da permição-->
+    <MudGrid Spacing="3" Class="mb-5">
+        <MudItem md="12" lg="12">
+            <MudButton Size="Size.Small" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Menu" Color="Color.Default" OnClick="@(()=>_isRolesNavMenuVisible= !_isRolesNavMenuVisible)">Roles</MudButton>
+            @foreach (var item in PermissionValues)
+            {
+                <MudButton Style="margin-left: 5px" Size="Size.Small" StartIcon="@(item._checked?Icons.Material.Filled.Check:string.Empty)" Variant="Variant.Filled" OnClick="@(()=>Search(item))" Color="Color.Default">@item._value.FirstLetterUpperCase()</MudButton>
+            }
+        </MudItem>
+    </MudGrid>
+
+    <!--Checked das permissões-->
+    <MudField Class="mb-4" Label="Permissões" Variant="Variant.Outlined" AdornmentIcon="@Icons.Material.Filled.CheckBoxOutlineBlank">
+        <MudPaper Elevation="0" Class="d-flex flex-column justify-space-between py-6">
+            <MudItem xs="12">
+                <MudGrid>
+                    @foreach (var item in DataPermissionSersh!)
+                    {
+                        <MudItem xs="12" md="3" lg="3">
+
+                            <MudCheckBox T="bool" Disabled="@(SelectedRoles == null)" Dense Value="@item.IsSelected" ValueChanged="@(()=>ValueChanged(item))" Class="d-inline-block">@item.Description</MudCheckBox>
+                        </MudItem>
+                    }
+                    <MudScrollToTop TopOffset="100" Selector="#another_unique_identifier" Style="z-index:2001;">
+                        <div class="mud-theme-secondary px-3 py-6 mud-elevation-16 rounded-xl fixed" style="bottom:20px;left:20px;">Voltar ao topo</div>
+                    </MudScrollToTop>
+                </MudGrid>
+            </MudItem>
+        </MudPaper>
+    </MudField>
+    <MudCardContent Class="pa-0">
+        @if (SelectedRoles != null && !string.IsNullOrEmpty(SelectedRoles.Name) || !string.IsNullOrEmpty(UpdateName))
+        {
+            <h3>Detalhes da função do aplicativo</h3>
+            <MudSimpleTable Dense Style="overflow-x: auto;">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>
+                            @if (UpdateName == null)
+                            {
+                                <MudIconButton Size="Size.Small" Color="Color.Warning" OnClick="@OpenDialog" Icon="@Icons.Material.Filled.Edit" aria-label="edit"></MudIconButton>
+                            }
+                            else
+                            {
+                                <MudChip T="string" Size="Size.Small" Color="@(string.IsNullOrEmpty(SelectedRoles?._id) ?Color.Success:Color.Warning)">
+                                    @(string.IsNullOrEmpty(SelectedRoles?._id) ? "Novo" : "Alterado") nome
+                                </MudChip>
+                            }
+                        </th>
+                        <th>Criação</th>
+                        <th></th>
+                        <th>Quantidade</th>
+                        <th></th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@nameof(SelectedRoles.Name):</td>
+                        <td>@(UpdateName ?? SelectedRoles?.Name)</td>
+                        <td>@nameof(SelectedRoles.CreateDate):</td>
+                        <td>@(SelectedRoles?.CreateDate ?? DateTime.Now)</td>
+                        <td>@nameof(SelectedRoles.Permissions):</td>
+                        <td>@(DataPermissionSersh?.Where(prop => prop.IsSelected).Count() ?? 0)</td>
+                        <td>
+                            <MudText>
+                                @(SelectedRoles!.IsActive ? "Ativado" : "Destivado")
+                            </MudText>
+                        </td>
+                        <td>
+                            <MudCheckBox T="bool" Dense Value="@SelectedRoles!.IsActive" ValueChanged="@ValueChangedCancel" Class="d-inline-block"></MudCheckBox>
+                        </td>
+                    </tr>
+                </tbody>
+            </MudSimpleTable>
+        }
+    </MudCardContent>
+</MudLayout>
+
+
